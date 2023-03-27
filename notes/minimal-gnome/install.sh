@@ -78,7 +78,7 @@ yay -S --noconfirm visual-studio-code-insiders-bin \
 
 ## work - configure git global
 git config --global user.name "Anuj Sable"
-git config --global user.email "sableanuj355@gmail.com"
+git config --global user.email "anujsablework@gmail.com"
 git config --global init.defaultBranch main
 
 ## install spotify
