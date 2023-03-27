@@ -83,4 +83,4 @@ git config --global init.defaultBranch main
 
 ## install spotify
 sudo -v pacman -S spotify-launcher
-sudo -v spotify-launcher
+spotify-launcher
