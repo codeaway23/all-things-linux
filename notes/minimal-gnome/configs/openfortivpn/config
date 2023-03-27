@@ -1,0 +1,5 @@
+host = 103.254.230.95
+port = 10443
+username = anuj.sable
+password = Quest@12345
+trusted-cert = 8ee2705c13ae5b84dd181090900a2d034eb8a67c6217058052686da7978e6678
