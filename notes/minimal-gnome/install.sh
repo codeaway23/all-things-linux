@@ -8,6 +8,7 @@ sudo pacman -Syu --noconfirm linux-firmware xorg-server \
                              xdg-user-dirs-gtk \
                              ntfs-3g \
                              eog totem evince file-roller nautilus \
+                             jq \
                              git
 
 # generate the arch manual database
@@ -75,6 +76,14 @@ sudo pacman -S --noconfirm postgresql mariadb \
                               docker docker-compose
 yay -S --noconfirm visual-studio-code-insiders-bin \
                    mongodb-bin
+
+# work - configure google calendar cli
+CLIENT_ID=$(jq '.client_id' /home/shared/all-things-linux/notes/minimal-gnome/configs/gcalcli/config.json)
+CLIENT_SECRET=$(jq '.client_secret' /home/shared/all-things-linux/notes/minimal-gnome/configs/gcalcli/config.json)
+python -m pip install python-dateutil parsedatetime \
+              httplib2 oauth2client google-api-python-client 
+yay -S --noconfirm gcalcli
+gcalcli --client-id $CLIENT_ID --client-secret $CLIENT_SECRET list
 
 ## work - configure git global
 git config --global user.name "Anuj Sable"
