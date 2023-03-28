@@ -77,13 +77,13 @@ sudo pacman -S --noconfirm postgresql mariadb \
 yay -S --noconfirm visual-studio-code-insiders-bin \
                    mongodb-bin
 
-# work - configure google calendar cli
-CLIENT_ID=$(jq '.client_id' /home/shared/all-things-linux/notes/minimal-gnome/configs/gcalcli/config.json)
-CLIENT_SECRET=$(jq '.client_secret' /home/shared/all-things-linux/notes/minimal-gnome/configs/gcalcli/config.json)
-python -m pip install python-dateutil parsedatetime \
-              httplib2 oauth2client google-api-python-client 
-yay -S --noconfirm gcalcli
-gcalcli --client-id $CLIENT_ID --client-secret $CLIENT_SECRET list
+## work - configure google calendar cli
+#CLIENT_ID=$(jq '.client_id' /home/shared/all-things-linux/notes/minimal-gnome/configs/gcalcli/config.json)
+#CLIENT_SECRET=$(jq '.client_secret' /home/shared/all-things-linux/notes/minimal-gnome/configs/gcalcli/config.json)
+#python -m pip install python-dateutil parsedatetime \
+#              httplib2 oauth2client google-api-python-client 
+#yay -S --noconfirm gcalcli
+#gcalcli --client-id $CLIENT_ID --client-secret $CLIENT_SECRET list
 
 ## work - configure git global
 git config --global user.name "Anuj Sable"
@@ -94,8 +94,12 @@ git config --global init.defaultBranch main
 sudo pacman -S --noconfirm ttf-font-awesome ttf-fira-code zsh
 exec /usr/bin/zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-git clone https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
+git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
 sed -i 's/^ZSH_THEME=\"robbyrussell\"*/ZSH_THEME=\"powerlevel10k\/powerlevel10k\"/g' ~/.zshrc
+sed -i 's/^plugins=(git)*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/g' ~/.zshrc
+sed -i 's/.*ENABLE_CORRECTION=\"true\"*/ENABLE_CORRECTION=\"true\"/g' ~/.zshrc
 source ~/.zshrc
 
 ## install spotify
