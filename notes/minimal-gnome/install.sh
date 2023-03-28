@@ -8,7 +8,7 @@ sudo pacman -Syu --noconfirm linux-firmware xorg-server \
                              xdg-user-dirs-gtk \
                              ntfs-3g \
                              eog totem evince file-roller nautilus \
-                             jq \
+                             curl wget jq \
                              git
 
 # generate the arch manual database
@@ -89,6 +89,14 @@ gcalcli --client-id $CLIENT_ID --client-secret $CLIENT_SECRET list
 git config --global user.name "Anuj Sable"
 git config --global user.email "anujsablework@gmail.com"
 git config --global init.defaultBranch main
+
+## shell, font and theme
+sudo pacman -S --noconfirm ttf-font-awesome ttf-fira-code zsh
+exec /usr/bin/zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+git clone https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
+sed -i 's/^ZSH_THEME=\"robbyrussell\"*/ZSH_THEME=\"powerlevel10k\/powerlevel10k\"/g' ~/.zshrc
+source ~/.zshrc
 
 ## install spotify
 sudo pacman -S --noconfirm spotify-launcher
