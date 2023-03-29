@@ -86,11 +86,13 @@ tar -xvzf kibana.tar.gz -C $SW_DIR
 tar -xvzf logstash.tar.gz $SW_DIR
 rm $DL_DIR/*
 sudo pacman -S --noconfirm postgresql mariadb \
-                              docker docker-compose
+                           rclone \
+                           docker docker-compose
 yay -S --noconfirm  postman-bin visual-studio-code-insiders-bin
 yay -S --noconfirm mongodb-bin
 
-## work - configure google calendar cli
+## work - install google calendar, gmail on thunderbird
+sudo paman -S --noconfirm thunderbird
 #CLIENT_ID=$(jq '.client_id' /home/shared/all-things-linux/notes/minimal-gnome/configs/gcalcli/config.json)
 #CLIENT_SECRET=$(jq '.client_secret' /home/shared/all-things-linux/notes/minimal-gnome/configs/gcalcli/config.json)
 #python -m pip install python-dateutil parsedatetime \
@@ -109,3 +111,11 @@ spotify-launcher
 
 ## restart system for zsh changes to take effect. after reboot, zsh will ask you to configure p10k. 
 # reboot
+
+## following this, you'll have to maually configure the following installed services. 
+# 1. spotify
+# 2. thunderbird
+# 3. postman
+# 4. visual studio
+# 5. slack
+# 6. brave browser
