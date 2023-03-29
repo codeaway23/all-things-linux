@@ -1,4 +1,3 @@
-  GNU nano 7.2                                 arch-install.sh                                 Modified  
 #!/bin/sh
 
 ADMIN=admin

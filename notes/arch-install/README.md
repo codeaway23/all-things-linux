@@ -1,12 +1,15 @@
 # arch installation
 
-hard disk - 1TB NVME-SSD
+#### my hard disk - 1TB NVME-SSD
 
-EFI disk (partition #1) formatted as a vfat32 filesystem. 
+## method
+
+EFI disk (partition #1) formatted as a vfat32 filesystem.
 boot disk (partition #2) is formatted as an ext4 filesystem. 
 arch installation (partition #3) is encypted with `cryptsetup` LUKS.
 arch installation root (logical volume #1) is formatted as a btrfs filesystem.
 arch installation home (logical colume #2) is formatted as an XFS filesystem.
+
 
 partition table is built using cfdisk as follows
 1. EFI filesystem - 2G

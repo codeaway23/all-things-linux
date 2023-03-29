@@ -51,8 +51,21 @@ sudo systemctl enable reflector.service reflector.timer
 sudo systemctl start reflector.service reflector.timer
 sudo systemctl start reflector.service
 
+## shell, font and theme
+sudo pacman -S --noconfirm zsh gsfonts
+yay -S --noconfirm powerline-fonts-git ttf-font-awesome ttf-jetbrains-mono ttf-fira-code ttf-iosevka ttf-monoid otf-hasklig \
+                   ttf-ms-fonts                  
+
+0>/dev/null sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+git clone https://github.com/zsh-users/zsh-autosuggestions $HOME/.oh-my-zsh/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.oh-my-zsh/plugins/zsh-syntax-highlighting
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $HOME/.oh-my-zsh/themes/powerlevel10k
+sed -i 's/^ZSH_THEME=\"robbyrussell\"*/ZSH_THEME=\"powerlevel10k\/powerlevel10k\"/g' $HOME/.zshrc
+sed -i 's/^plugins=(git)*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/g' $HOME/.zshrc
+sed -i 's/.*ENABLE_CORRECTION=\"true\"*/ENABLE_CORRECTION=\"true\"/g' $HOME/.zshrc
+
 ## work - desktop applications
-yay -S --noconfirm slack-desktop postman-bin
+yay -S --noconfirm slack-desktop
 
 ## work - VPN setup
 sudo pacman -S --noconfirm openfortivpn
@@ -74,8 +87,8 @@ tar -xvzf logstash.tar.gz $SW_DIR
 rm $DL_DIR/*
 sudo pacman -S --noconfirm postgresql mariadb \
                               docker docker-compose
-yay -S --noconfirm visual-studio-code-insiders-bin \
-                   mongodb-bin
+yay -S --noconfirm  postman-bin visual-studio-code-insiders-bin
+yay -S --noconfirm mongodb-bin
 
 ## work - configure google calendar cli
 #CLIENT_ID=$(jq '.client_id' /home/shared/all-things-linux/notes/minimal-gnome/configs/gcalcli/config.json)
@@ -93,17 +106,6 @@ git config --global init.defaultBranch main
 ## install spotify
 sudo pacman -S --noconfirm spotify-launcher
 spotify-launcher
-
-## shell, font and theme
-sudo pacman -S --noconfirm ttf-font-awesome ttf-fira-code zsh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-exit
-git clone https://github.com/zsh-users/zsh-autosuggestions $HOME/.oh-my-zsh/plugins/zsh-autosuggestions
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.oh-my-zsh/plugins/zsh-syntax-highlighting
-git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $HOME/.oh-my-zsh/themes/powerlevel10k
-sed -i 's/^ZSH_THEME=\"robbyrussell\"*/ZSH_THEME=\"powerlevel10k\/powerlevel10k\"/g' $HOME/.zshrc
-sed -i 's/^plugins=(git)*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/g' $HOME/.zshrc
-sed -i 's/.*ENABLE_CORRECTION=\"true\"*/ENABLE_CORRECTION=\"true\"/g' $HOME/.zshrc
 
 ## restart system for zsh changes to take effect. after reboot, zsh will ask you to configure p10k. 
 # reboot
