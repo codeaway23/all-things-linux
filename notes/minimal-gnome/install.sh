@@ -93,12 +93,6 @@ yay -S --noconfirm mongodb-bin
 
 ## work - install google calendar, gmail on thunderbird
 sudo paman -S --noconfirm thunderbird
-#CLIENT_ID=$(jq '.client_id' /home/shared/all-things-linux/notes/minimal-gnome/configs/gcalcli/config.json)
-#CLIENT_SECRET=$(jq '.client_secret' /home/shared/all-things-linux/notes/minimal-gnome/configs/gcalcli/config.json)
-#python -m pip install python-dateutil parsedatetime \
-#              httplib2 oauth2client google-api-python-client 
-#yay -S --noconfirm gcalcli
-#gcalcli --client-id $CLIENT_ID --client-secret $CLIENT_SECRET list
 
 ## work - configure git global
 git config --global user.name "Anuj Sable"
