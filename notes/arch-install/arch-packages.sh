@@ -1,6 +1,7 @@
 #!/bin/sh
 
 ADMIN=admin
+NEW_USER=anuj
 
 pacman-key --init
 pacman-key --populate
@@ -28,4 +29,8 @@ systemctl enable NetworkManager
 passwd
 
 useradd -m -g users -G wheel $ADMIN
-passwd admin $ADMIN
+passwd $ADMIN
+
+useradd -m -g users $NEW_USER
+passwd $NEW_USER
+

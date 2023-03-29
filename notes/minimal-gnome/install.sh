@@ -11,7 +11,7 @@ sudo pacman -Syu --noconfirm linux-firmware xorg-server \
                              curl wget jq \
                              git
 
-# generate the arch manual database
+## generate the arch manual database
 sudo pacman -S --noconfirm man-db man-pages && mandb
 
 ## handling home directory creation all users present including this one.
@@ -21,7 +21,7 @@ LC_ALL=C xdg-user-dirs-update --force
 ## create a shared directory which is open to every one (for now).
 sudo chmod ugo+rwx /home/shared
 
-# where all user software lies
+## where all user software lies
 SW_DIR=/home/$USER/software
 mkdir -p $SW_DIR
 
@@ -88,8 +88,9 @@ rm $DL_DIR/*
 sudo pacman -S --noconfirm postgresql mariadb \
                            rclone \
                            docker docker-compose
-yay -S --noconfirm  postman-bin visual-studio-code-insiders-bin
-yay -S --noconfirm mongodb-bin
+yay -S --noconfirm  postman-bin \
+                    visual-studio-code-insiders-bin \
+                    mongodb-bin
 
 ## work - install google calendar, gmail on thunderbird
 sudo paman -S --noconfirm thunderbird
