@@ -1,0 +1,48 @@
+Cmnd_Alias NETWORKING = /usr/bin/ip, /usr/bin/iwconfig
+Cmnd_Alias FIREWALL = /usr/bin/firewalld, /usr/bin/ufw, /usr/bin/iptables
+Cmnd_Alias SOFTWARE = /usr/bin/pacman
+Cmnd_Alias SERVICES = /usr/bin/systemctl
+Cmnd_Alias FILESYS = /usr/bin/ls, /usr/bin/cd, /usr/bin/mkdir, /usr/bin/
+Cmnd_Alias STORAGE = /usr/bin/fdisk, /usr/bin/sfdisk, /usr/bin/parted, /usr/bin/partprobe \
+                     /usr/bin/btrfs
+Cmnd_Alias EXT_STORAGE = /usr/bin/mount, /usr/bin/umount
+Cmnd_Alias DELEGATING = /usr/bin/chown, /usr/bin/chmod, /usr/bin/chgrp, /usr/bin/gpasswd
+Cmnd_Alias PROCESSES = /bin/nice, /bin/kill, /usr/bin/kill, /usr/bin/killall
+Cmnd_Alias DRIVERS = /usr/bin/modprobe
+Cmnd_Alias USRMGR = /usr/bin/visudo, /usr/bin/su, /usr/bin/passwd, \
+                    /usr/bin/useradd, /usr/bin/usermod, /usr/bin/userdel, \
+                    /usr/bin/groupadd, /usr/bin/groupmod, /usr/bin/groupdel
+Cmnd_Alias MONITORING = /usr/bin/top, /usr/bin/htop, /usr/bin/btop, /usr/bin/nvtop
+Cmnd_Alias SHELL = /usr/bin/bash, /usr/bin/sh, /bin/bash, /bin/sh, \
+                   /usr/bin/zsh, /bin/zsh
+Cmnd_Alias POWER = /usr/bin/reboot, /usr/bin/shutdown
+
+Defaults env_reset
+Defaults env_keep += "LANG LANGUAGE LINGUAS LC_* _XKB_CHARSET"
+Defaults env_keep += "HOME"
+Defaults env_keep += "XAPPLRESDIR XFILESEARCHPATH XUSERFILESEARCHPATH"
+Defaults env_keep += "QTDIR KDEDIR"
+Defaults env_keep += "XDG_SESSION_COOKIE"
+Defaults env_keep += "XMODIFIERS GTK_IM_MODULE QT_IM_MODULE QT_IM_SWITCHER"
+
+Defaults insults 
+Defaults lecture="once"
+Defaults passwd_tries=5 
+Defaults passwd_timeout=5
+Defaults timestamp_timeout=15
+Defaults log_host, log_year
+Defaults log_input, log_output
+Defaults logfile="/var/log/sudo.log"
+
+root    ALL=(ALL)     ALL
+%wheel  ALL=(root)    ALL
+%wheel  ALL=(%wheel)  NETWORKING, FIREWALL, SOFTWARE, SERVICES, FILESYS, STORAGE, EXT_STORAGE, \
+                      DELEGATING, PROCESSES, DRIVERS, USRMGR, MONITORING, SHELL, POWER 
+%users  ALL=(root)    POWER
+%users  ALL=(%wheel)  NETWORKING, SOFTWARE, SERVICES, EXT_STORAGE, DRIVERS, SHELL, POWER, \
+                      !FIREWALL, !STORAGE, !FILESYS, !DELEGATING, !PROCESSES, !USRMGR, !MONITORING
+%users  ALL=(%users)  NETWORKING, SOFTWARE, SERVICES, FILESYS, EXT_STORAGE, DRIVERS, MONITORING, SHELL, POWER, \
+                      !FIREWALL, !STORAGE, !DELEGATING, !PROCESSES, !USRMGR
+
+
+@includedir /etc/sudoers.d
