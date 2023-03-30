@@ -1,7 +1,7 @@
 #!/bin/sh
 
 ADMIN=admin
-NEW_USER=anuj
+#NEW_USER=anuj
 
 pacman-key --init
 pacman-key --populate
@@ -33,9 +33,9 @@ echo "set password for $ADMIN"
 useradd -m -g users -G wheel $ADMIN
 passwd $ADMIN
 
-echo "set password for $NEW_USER"
-useradd -m -g users $NEW_USER
-passwd $NEW_USER
+#echo "set password for $NEW_USER"
+#useradd -m -g users $NEW_USER
+#passwd $NEW_USER
 
-cat /home/shared/all-things-linux/notes/user-mgmt/visudo.template > /etc/sudoers
-
+#cat /home/shared/all-things-linux/notes/user-mgmt/visudo.template > /etc/sudoers
+echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
