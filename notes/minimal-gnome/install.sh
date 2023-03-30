@@ -1,7 +1,9 @@
 #!/bin/sh
 
+ADMIN=panopticon
+
 ## minimal sofotware installation for a functional gnome GUI
-sudo pacman -Syu --noconfirm linux-firmware xorg-server \
+sudo -u $ADMIN pacman -Syu --noconfirm linux-firmware xorg-server \
                              gdm gnome-shell gnome-terminal mutter \
                              network-manager-applet gnome-keyring \
                              gnome-backgrounds gnome-control-center \
@@ -12,14 +14,14 @@ sudo pacman -Syu --noconfirm linux-firmware xorg-server \
                              git
 
 ## generate the arch manual database
-sudo pacman -S --noconfirm man-db man-pages && mandb
+sudo -u $ADMIN pacman -S --noconfirm man-db man-pages && mandb
 
 ## handling home directory creation all users present including this one.
-sudo mkhomedir_helper $USER
+sudo -u $ADMIN mkhomedir_helper $USER
 LC_ALL=C xdg-user-dirs-update --force
 
 ## create a shared directory which is open to every one (for now).
-sudo chmod ugo+rwx /home/shared
+sudo -u $ADMIN chmod ugo+rwx /home/shared
 
 ## where all user software lies
 SW_DIR=/home/$USER/software
@@ -40,19 +42,19 @@ yay -S --noconfirm brave-bin
 pulseaudio --start
 
 ## start bluetooth
-sudo systemctl enable bluetooth
-sudo systemctl start bluetooth
+sudo -u $ADMIN systemctl enable bluetooth
+sudo -u $ADMIN systemctl start bluetooth
 
 ## arch mirrors synchronization
-sudo pacman -S --noconfirm reflector
-sudo sed -i 's/^--sort .*/--sort rate/g' /etc/xdg/reflector/reflector.conf
-sudo sed -i 's/^--country .*/--country India/g' /etc/xdg/reflector/reflector.conf
-sudo systemctl enable reflector.service reflector.timer
-sudo systemctl start reflector.service reflector.timer
-sudo systemctl start reflector.service
+sudo -u $ADMIN pacman -S --noconfirm reflector
+sudo -u $ADMIN sed -i 's/^--sort .*/--sort rate/g' /etc/xdg/reflector/reflector.conf
+sudo -u $ADMIN sed -i 's/^--country .*/--country India/g' /etc/xdg/reflector/reflector.conf
+sudo -u $ADMIN systemctl enable reflector.service reflector.timer
+sudo -u $ADMIN systemctl start reflector.service reflector.timer
+sudo -u $ADMIN systemctl start reflector.service
 
 ## shell, font and theme
-sudo pacman -S --noconfirm zsh gsfonts
+sudo -u $ADMIN pacman -S --noconfirm zsh gsfonts
 yay -S --noconfirm powerline-fonts-git ttf-font-awesome ttf-jetbrains-mono ttf-fira-code ttf-iosevka ttf-monoid otf-hasklig \
                    ttf-ms-fonts                  
 
@@ -68,8 +70,8 @@ sed -i 's/.*ENABLE_CORRECTION=\"true\"*/ENABLE_CORRECTION=\"true\"/g' $HOME/.zsh
 yay -S --noconfirm slack-desktop
 
 ## work - VPN setup
-sudo pacman -S --noconfirm openfortivpn
-sudo cp /home/shared/all-things-linux/notes/minimal-gnome/configs/openfortivpn/config /etc/openfortivpn/config
+sudo -u $ADMIN pacman -S --noconfirm openfortivpn
+sudo -u $ADMIN cp /home/shared/all-things-linux/notes/minimal-gnome/configs/openfortivpn/config /etc/openfortivpn/config
 
 ## work - dev tools
 DL_DIR=/home/$USER/Downloads
@@ -85,7 +87,7 @@ tar -xvzf elasticsearch.tar.gz -C $SW_DIR
 tar -xvzf kibana.tar.gz -C $SW_DIR
 tar -xvzf logstash.tar.gz $SW_DIR
 rm $DL_DIR/*
-sudo pacman -S --noconfirm postgresql mariadb \
+sudo -u $ADMIN pacman -S --noconfirm postgresql mariadb \
                            rclone \
                            docker docker-compose
 yay -S --noconfirm  postman-bin \
@@ -93,7 +95,7 @@ yay -S --noconfirm  postman-bin \
                     mongodb-bin
 
 ## work - install google calendar, gmail on thunderbird
-sudo paman -S --noconfirm thunderbird
+sudo -u $ADMIN paman -S --noconfirm thunderbird
 
 ## work - configure git global
 git config --global user.name "Anuj Sable"
@@ -101,7 +103,7 @@ git config --global user.email "anujsablework@gmail.com"
 git config --global init.defaultBranch main
 
 ## install spotify
-sudo pacman -S --noconfirm spotify-launcher
+sudo -u $ADMIN pacman -S --noconfirm spotify-launcher
 spotify-launcher
 
 ## restart system for zsh changes to take effect. after reboot, zsh will ask you to configure p10k. 
