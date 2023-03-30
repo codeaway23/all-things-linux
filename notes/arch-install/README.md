@@ -26,6 +26,16 @@ logical volumes for home and root. the btrfs file system will have several subvo
 well. finally, it will mount all of these, use pactstrap and get you arch-chroot acccess to the 
 installation. it will also move this git repository into `/mnt/home/shared/` directory. 
 
+then, run the following commands. 
+```bash
+arch-chroot /mnt
+mkdir -p /home/shared/
+cd /home/shared
+git clone https://github.com/codeaway23/all-things-linux.git
+```
+
+go into the `all-things-linux/notes/arch-install` folder. 
+
 following that, run the following command. 
 ```bash
 bash arch-packages.sh
@@ -33,9 +43,8 @@ bash arch-packages.sh
 
 this script will install the linux kernel and all the basic packages needed for a functional arch 
 system. it will also set locale, set a root password and create a user in the wheel 
-group called admin. it will also set all the /etc/sudoers rules as mentioned in the template in 
-user-mgmt. 
-
+group called admin. i have currently given up on user management. but it will give your wheel user sudo 
+access.
 
 following that, run the following command.
 ```bash
@@ -45,8 +54,9 @@ bash grub-install-setup.sh
 this will install grub related packages, install grub on your boot drive and configure it as required.
 after the installation, it will exit the chroot environment. 
 
-here, re-generate the `fstab` file to include the EFI parition as follows.
+here, exit chroot environment, re-generate the `fstab` file to include the EFI parition as follows. 
 ```bash
+exit
 genfstab -U -p /mnt > /mnt/etc/fstab
 ```
 
@@ -58,9 +68,10 @@ reboot
 
 if everything went well, your arch installation is done. 
 
-make some minor tweaks using the following script. 
+make some minor tweaks using the following script. make sure to login as root. 
 ```bash
 bash post-installation.sh
 ```
 
-and you're done. you can move on to installing a window manager and a desktop environment. 
+and you're done. you can move on to installing a window manager and a desktop environment. it is 
+advisable you DON'T login as root but as the wheel user we created earlier. 

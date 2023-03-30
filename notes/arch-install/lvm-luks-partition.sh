@@ -48,12 +48,6 @@ mount /dev/vg00/lv-home /mnt/home
 mkdir -p /mnt/boot
 mount $DISK_BOOT /mnt/boot
 
-genfstab -U -p /mnt > /etc/fstab
+genfstab -U -p /mnt > /mnt/etc/fstab
 
-pacstrap -i /mnt base
-
-cd ~
-mkdir -p /mnt/home/shared
-cp -r all-things-linux /mnt/home/shared
-arch-chroot /mnt
-cd /home/shared/all-things-linux/notes/arch-install
+pacstrap -i /mnt base git
