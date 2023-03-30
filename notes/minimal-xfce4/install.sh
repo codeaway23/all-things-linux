@@ -1,16 +1,17 @@
 #!/bin/sh
 
-## minimal sofotware installation for a functional Xfce4 GUI
+# minimal sofotware installation for a functional Xfce4 GUI
 sudo pacman -Syu --noconfirm linux-firmware  \
                              xfce4 \
-#                             xfce4-goodies \
+			     xfce-artwork \
                              lightdm lightdm-gtk-greeter \
                              network-manager-applet \
                              xdg-user-dirs-gtk \
                              ntfs-3g \
                              curl wget jq \
-                             file-roller \
-                             git
+                             file-roller parole ristretto \
+                             git \
+                             alsa-utils blueman
 
 ## start lightdm 
 sudo systemctl enable lightdm
@@ -21,6 +22,18 @@ sudo pacman -S --noconfirm man-db man-pages && mandb
 ## handling home directory creation all users present including this one.
 sudo mkhomedir_helper $USER
 LC_ALL=C xdg-user-dirs-update --force
+
+## enable audio
+cp /home/shared/all-things-linux/notes/minimal-xfce4/cofigs/alsa/.asoundrc /home/$USER/.asoundrc
+amixer sset Master unmute
+amixer sset Speaker unmute
+amixer sset Headphone unmute
+#amixer sset Master 100%
+#amixer sset Speaker 100%
+#amixer sset Headphone 100%
+
+## enable bluetooth
+sudo systemctl enable bluetooth
 
 # ## create a shared directory which is open to every one (for now).
 # sudo chmod ugo+rwx /home/shared
@@ -39,13 +52,6 @@ cd /home/$USER
 ## install brave browser
 yay -Syu --noconfirm
 yay -S --noconfirm brave-bin
-
-## fix speakers and microphone
-pulseaudio --start
-
-## start bluetooth
-sudo systemctl enable bluetooth
-sudo systemctl start bluetooth
 
 ## arch mirrors synchronization
 sudo pacman -S --noconfirm reflector
@@ -71,10 +77,10 @@ sed -i 's/.*ENABLE_CORRECTION=\"true\"*/ENABLE_CORRECTION=\"true\"/g' $HOME/.zsh
 ## dev tools
 DL_DIR=/home/$USER/Downloads
 mkdir -p $DL_DIR
-cd $DL_DIR
-curl -L -O https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-bash Miniconda3-latest-Linux-x86_64.sh
-rm $DL_DIR/*
+#cd $DL_DIR
+#curl -L -O https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+#bash Miniconda3-latest-Linux-x86_64.sh
+#rm $DL_DIR/*
 
 sudo pacman -S --noconfirm neovim
 
