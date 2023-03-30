@@ -7,7 +7,7 @@ sudo pacman -Syu --noconfirm linux-firmware xorg-server \
                              gnome-backgrounds gnome-control-center \
                              xdg-user-dirs-gtk \
                              ntfs-3g \
-                             eog totem evince file-roller nautilus \
+                             eog totem evince file-roller nemo \
                              curl wget jq \
                              git
 
@@ -63,6 +63,7 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $HOME/.oh-my-zs
 sed -i 's/^ZSH_THEME=\"robbyrussell\"*/ZSH_THEME=\"powerlevel10k\/powerlevel10k\"/g' $HOME/.zshrc
 sed -i 's/^plugins=(git)*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/g' $HOME/.zshrc
 sed -i 's/.*ENABLE_CORRECTION=\"true\"*/ENABLE_CORRECTION=\"true\"/g' $HOME/.zshrc
+chsh -s $(which zsh)
 
 ## work - desktop applications
 yay -S --noconfirm slack-desktop
