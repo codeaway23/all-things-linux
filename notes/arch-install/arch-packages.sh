@@ -37,5 +37,5 @@ echo "set password for $NEW_USER"
 useradd -m -g users $NEW_USER
 passwd $NEW_USER
 
-cat ../user-mgmt/visudo.template > /etc/sudoers
+cat /home/shared/all-things-linux/notes/user-mgmt/visudo.template > /etc/sudoers
 

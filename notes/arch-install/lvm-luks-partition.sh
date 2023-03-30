@@ -4,7 +4,7 @@ DISK_EFI=/dev/nvme0n1p1
 DISK_BOOT=/dev/nvme0n1p2
 DISK_ARCH=/dev/nvme0n1p3
 
-cryptseetup luksFormat $DISK_ARCH
+cryptsetup luksFormat $DISK_ARCH
 cryptsetup luksOpen $DISK_ARCH arch
 
 pvcreate --dataalignment 1M /dev/mapper/arch
