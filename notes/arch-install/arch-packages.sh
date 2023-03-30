@@ -9,7 +9,7 @@ pacman-key --populate
 pacman -Syu
 
 pacman -S base-devel \
-          btrfs-progs \
+          btrfs-progs xfsprogs \
           linux-lts linux-lts-headers \
           nano neovim \
           openssh \
@@ -33,4 +33,6 @@ passwd $ADMIN
 
 useradd -m -g users $NEW_USER
 passwd $NEW_USER
+
+cat ../user-mgmt/visudo.template > /etc/sudoers
 

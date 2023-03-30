@@ -11,7 +11,7 @@ arch installation root (logical volume #1) is formatted as a btrfs filesystem.
 arch installation home (logical colume #2) is formatted as an XFS filesystem.
 
 
-partition table is built using cfdisk as follows
+partition table is built using `cfdisk` as follows
 1. EFI filesystem - 2G
 2. Linux filesystem - 2G
 3. Linux LVM - 300G
@@ -23,10 +23,8 @@ bash lvm-luks-partition.sh
 
 the script above will format your drive, partition it, create physical volumes, volume groups and 
 logical volumes for home and root. the btrfs file system will have several subvolumes created as 
-well. 
-
-finally, it will mount all of these, use pactstrap and get you arch-chroot acccess to the 
-installation. 
+well. finally, it will mount all of these, use pactstrap and get you arch-chroot acccess to the 
+installation. it will also move this git repository into `/mnt/home/shared/` directory. 
 
 following that, run the following command. 
 ```bash
@@ -35,17 +33,9 @@ bash arch-packages.sh
 
 this script will install the linux kernel and all the basic packages needed for a functional arch 
 system. it will also set locale, set a root password and create a user in the wheel 
-group called admin. 
+group called admin. it will also set all the /etc/sudoers rules as mentioned in the template in 
+user-mgmt. 
 
-following this, this part has to be done manually. 
-run the following command.
-```bash
-EDITOR=nano visudo
-```
-
-it'll open a file in the nano text editor. 
-find and uncomment the line `%wheel ALL=(ALL) ALL`.
-save the file and exit. 
 
 following that, run the following command.
 ```bash
