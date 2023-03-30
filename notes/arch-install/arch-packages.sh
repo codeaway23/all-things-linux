@@ -11,7 +11,7 @@ pacman -Syu
 pacman -S base-devel \
           btrfs-progs xfsprogs \
           linux-lts linux-lts-headers \
-          nano neovim \
+          nano \
           openssh \
           networkmanager wpa_supplicant netctl wireless_tools dialog \
           lvm2 
