@@ -2,7 +2,7 @@ Cmnd_Alias NETWORKING = /usr/bin/ip, /usr/bin/iwconfig
 Cmnd_Alias FIREWALL = /usr/bin/firewalld, /usr/bin/ufw, /usr/bin/iptables
 Cmnd_Alias SOFTWARE = /usr/bin/pacman
 Cmnd_Alias SERVICES = /usr/bin/systemctl
-Cmnd_Alias FILESYS = /usr/bin/ls, /usr/bin/cd, /usr/bin/mkdir, /usr/bin/
+Cmnd_Alias FILESYS = /usr/bin/ls, /usr/bin/cd, /usr/bin/mkdir, /usr/bin/cat
 Cmnd_Alias STORAGE = /usr/bin/fdisk, /usr/bin/sfdisk, /usr/bin/parted, /usr/bin/partprobe \
                      /usr/bin/btrfs
 Cmnd_Alias EXT_STORAGE = /usr/bin/mount, /usr/bin/umount
@@ -15,6 +15,7 @@ Cmnd_Alias USRMGR = /usr/bin/visudo, /usr/bin/su, /usr/bin/passwd, \
 Cmnd_Alias MONITORING = /usr/bin/top, /usr/bin/htop, /usr/bin/btop, /usr/bin/nvtop
 Cmnd_Alias SHELL = /usr/bin/bash, /usr/bin/sh, /bin/bash, /bin/sh, \
                    /usr/bin/zsh, /bin/zsh
+Cmnd_Alias EDITORS = /usr/bin/nano, /usr/bin/vi, /usr/bin/vim, /usr/bin/nvim
 Cmnd_Alias POWER = /usr/bin/reboot, /usr/bin/shutdown
 
 Defaults env_reset
@@ -37,11 +38,11 @@ Defaults logfile="/var/log/sudo.log"
 root    ALL=(ALL)     ALL
 %wheel  ALL=(root)    ALL
 %wheel  ALL=(%wheel)  NETWORKING, FIREWALL, SOFTWARE, SERVICES, FILESYS, STORAGE, EXT_STORAGE, \
-                      DELEGATING, PROCESSES, DRIVERS, USRMGR, MONITORING, SHELL, POWER 
-%users  ALL=(root)    POWER
-%users  ALL=(%wheel)  NETWORKING, SOFTWARE, SERVICES, EXT_STORAGE, DRIVERS, SHELL, POWER, \
+                      DELEGATING, PROCESSES, DRIVERS, USRMGR, MONITORING, SHELL, EDITORS, POWER 
+%users  ALL=(root)    POWER, SERVICES, EDITORS, POWER
+%users  ALL=(%wheel)  NETWORKING, SOFTWARE, SERVICES, EXT_STORAGE, DRIVERS, SHELL, EDITORS, POWER, \
                       !FIREWALL, !STORAGE, !FILESYS, !DELEGATING, !PROCESSES, !USRMGR, !MONITORING
-%users  ALL=(%users)  NETWORKING, SOFTWARE, SERVICES, FILESYS, EXT_STORAGE, DRIVERS, MONITORING, SHELL, POWER, \
+%users  ALL=(%users)  NETWORKING, SOFTWARE, SERVICES, FILESYS, EXT_STORAGE, DRIVERS, MONITORING, SHELL, EDITORS, POWER, \
                       !FIREWALL, !STORAGE, !DELEGATING, !PROCESSES, !USRMGR
 
 

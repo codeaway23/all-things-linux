@@ -1,9 +1,7 @@
 #!/bin/sh
 
-ADMIN=panopticon
-
 ## minimal sofotware installation for a functional gnome GUI
-sudo -u $ADMIN pacman -Syu --noconfirm linux-firmware xorg-server \
+sudo -v pacman -Syu --noconfirm linux-firmware xorg-server \
                              gdm gnome-shell gnome-terminal mutter \
                              network-manager-applet gnome-keyring \
                              gnome-backgrounds gnome-control-center \
@@ -14,14 +12,14 @@ sudo -u $ADMIN pacman -Syu --noconfirm linux-firmware xorg-server \
                              git
 
 ## generate the arch manual database
-sudo -u $ADMIN pacman -S --noconfirm man-db man-pages && mandb
+sudo -v pacman -S --noconfirm man-db man-pages && mandb
 
 ## handling home directory creation all users present including this one.
-sudo -u $ADMIN mkhomedir_helper $USER
+sudo -v mkhomedir_helper $USER
 LC_ALL=C xdg-user-dirs-update --force
 
-## create a shared directory which is open to every one (for now).
-sudo -u $ADMIN chmod ugo+rwx /home/shared
+# ## create a shared directory which is open to every one (for now).
+# sudo -v chmod ugo+rwx /home/shared
 
 ## where all user software lies
 SW_DIR=/home/$USER/software
@@ -42,19 +40,19 @@ yay -S --noconfirm brave-bin
 pulseaudio --start
 
 ## start bluetooth
-sudo -u $ADMIN systemctl enable bluetooth
-sudo -u $ADMIN systemctl start bluetooth
+sudo -v systemctl enable bluetooth
+sudo -v systemctl start bluetooth
 
 ## arch mirrors synchronization
-sudo -u $ADMIN pacman -S --noconfirm reflector
-sudo -u $ADMIN sed -i 's/^--sort .*/--sort rate/g' /etc/xdg/reflector/reflector.conf
-sudo -u $ADMIN sed -i 's/^--country .*/--country India/g' /etc/xdg/reflector/reflector.conf
-sudo -u $ADMIN systemctl enable reflector.service reflector.timer
-sudo -u $ADMIN systemctl start reflector.service reflector.timer
-sudo -u $ADMIN systemctl start reflector.service
+sudo -v pacman -S --noconfirm reflector
+sudo -v sed -i 's/^--sort .*/--sort rate/g' /etc/xdg/reflector/reflector.conf
+sudo -v sed -i 's/^--country .*/--country India/g' /etc/xdg/reflector/reflector.conf
+sudo -v systemctl enable reflector.service reflector.timer
+sudo -v systemctl start reflector.service reflector.timer
+sudo -v systemctl start reflector.service
 
 ## shell, font and theme
-sudo -u $ADMIN pacman -S --noconfirm zsh gsfonts
+sudo -v pacman -S --noconfirm zsh gsfonts
 yay -S --noconfirm powerline-fonts-git ttf-font-awesome ttf-jetbrains-mono ttf-fira-code ttf-iosevka ttf-monoid otf-hasklig \
                    ttf-ms-fonts                  
 
@@ -70,8 +68,8 @@ sed -i 's/.*ENABLE_CORRECTION=\"true\"*/ENABLE_CORRECTION=\"true\"/g' $HOME/.zsh
 yay -S --noconfirm slack-desktop
 
 ## work - VPN setup
-sudo -u $ADMIN pacman -S --noconfirm openfortivpn
-sudo -u $ADMIN cp /home/shared/all-things-linux/notes/minimal-gnome/configs/openfortivpn/config /etc/openfortivpn/config
+sudo -v pacman -S --noconfirm openfortivpn
+sudo -v cp /home/shared/all-things-linux/notes/minimal-gnome/configs/openfortivpn/config /etc/openfortivpn/config
 
 ## work - dev tools
 DL_DIR=/home/$USER/Downloads
@@ -87,7 +85,7 @@ tar -xvzf elasticsearch.tar.gz -C $SW_DIR
 tar -xvzf kibana.tar.gz -C $SW_DIR
 tar -xvzf logstash.tar.gz $SW_DIR
 rm $DL_DIR/*
-sudo -u $ADMIN pacman -S --noconfirm postgresql mariadb \
+sudo -v pacman -S --noconfirm postgresql mariadb \
                            rclone \
                            docker docker-compose
 yay -S --noconfirm  postman-bin \
@@ -95,7 +93,7 @@ yay -S --noconfirm  postman-bin \
                     mongodb-bin
 
 ## work - install google calendar, gmail on thunderbird
-sudo -u $ADMIN paman -S --noconfirm thunderbird
+sudo -v pacman -S --noconfirm thunderbird
 
 ## work - configure git global
 git config --global user.name "Anuj Sable"
@@ -103,7 +101,7 @@ git config --global user.email "anujsablework@gmail.com"
 git config --global init.defaultBranch main
 
 ## install spotify
-sudo -u $ADMIN pacman -S --noconfirm spotify-launcher
+sudo -v pacman -S --noconfirm spotify-launcher
 spotify-launcher
 
 ## restart system for zsh changes to take effect. after reboot, zsh will ask you to configure p10k. 
