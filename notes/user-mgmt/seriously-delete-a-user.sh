@@ -12,4 +12,4 @@ sudo crontab -r -u $DYING_USER
 
 lprm -U $DYING_USER
 
-sudo userdel --rmeove $DYING_USER
+sudo userdel --remove $DYING_USER
