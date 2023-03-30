@@ -89,8 +89,13 @@ sudo pacman -S --noconfirm postgresql mariadb \
                            rclone \
                            docker docker-compose
 yay -S --noconfirm  postman-bin \
-                    visual-studio-code-insiders-bin \
                     mongodb-bin
+
+## work - vs-code-insiders - with extensions
+yay -S visual-studio-code-insiders-bin
+code-insiders --list-extensions | xargs -n 1 code-insiders --uninstall-extension
+cat /home/shared/all-things-linux/notes/minimal-gnome/configs/vscode-insiders/extensions_list.txt | \
+xargs -n 1 code-insiders --install-extension
 
 ## work - install google calendar, gmail on thunderbird
 sudo paman -S --noconfirm thunderbird
