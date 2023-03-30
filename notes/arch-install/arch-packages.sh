@@ -26,11 +26,14 @@ locale-gen
 systemctl enable sshd
 systemctl enable NetworkManager
 
+echo "set password for root"
 passwd
 
+echo "set password for $ADMIN"
 useradd -m -g users -G wheel $ADMIN
 passwd $ADMIN
 
+echo "set password for $NEW_USER"
 useradd -m -g users $NEW_USER
 passwd $NEW_USER
 
