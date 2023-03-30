@@ -104,8 +104,14 @@ git config --global init.defaultBranch main
 sudo -v pacman -S --noconfirm spotify-launcher
 spotify-launcher
 
-## restart system for zsh changes to take effect. after reboot, zsh will ask you to configure p10k. 
-# reboot
+# remove root filesys access for users
+VISUDO_ROOT_RULE="%users  ALL=(root)    FILEREAD, FILEMOD, SERVICES, EDITORS, POWER"
+VISUDO_NEW_ROOT_RULE="%users  ALL=(root)    SERVICES, EDITORS, POWER"
+sudo sed -i "s/$VISUDO_ROOT_RULE/$VISUDO_NEW_ROOT_RULE/g" /etc/sudoers
+
+## relogin for zsh changes to take effect.  
+logout
+
 
 ## following this, you'll have to maually configure the following installed services. 
 # 1. spotify
@@ -114,3 +120,4 @@ spotify-launcher
 # 4. visual studio
 # 5. slack
 # 6. brave browser
+# 7. zsh, oh-my-zsh, p10k
