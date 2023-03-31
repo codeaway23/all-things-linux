@@ -13,6 +13,9 @@ sudo pacman -Syu --noconfirm linux-firmware xorg-server \
                              curl wget jq \
                              git
 
+## enable gdm
+sudo systemctl enable gdm
+
 ## generate the arch manual database
 sudo pacman -S --noconfirm man-db man-pages && mandb
 
@@ -64,6 +67,9 @@ sed -i 's/^ZSH_THEME=\"robbyrussell\"*/ZSH_THEME=\"powerlevel10k\/powerlevel10k\
 sed -i 's/^plugins=(git)*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/g' $HOME/.zshrc
 sed -i 's/.*ENABLE_CORRECTION=\"true\"*/ENABLE_CORRECTION=\"true\"/g' $HOME/.zshrc
 chsh -s $(which zsh)
+
+sudo pacman -S --noconfirm neofetch
+echo "neofetch" >> $HOME/.zshrc
 
 ## work - desktop applications
 yay -S --noconfirm slack-desktop
