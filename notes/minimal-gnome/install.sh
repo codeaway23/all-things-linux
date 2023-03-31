@@ -5,6 +5,8 @@ sudo pacman -Syu --noconfirm linux-firmware xorg-server \
                              gdm gnome-shell gnome-terminal mutter \
                              network-manager-applet gnome-keyring \
                              gnome-backgrounds gnome-control-center \
+                             gnome-tweaks \
+                             gnome-shell-extensions \
                              xdg-user-dirs-gtk \
                              ntfs-3g \
                              eog totem evince file-roller nemo \
@@ -17,9 +19,6 @@ sudo pacman -S --noconfirm man-db man-pages && mandb
 ## handling home directory creation all users present including this one.
 sudo mkhomedir_helper $USER
 LC_ALL=C xdg-user-dirs-update --force
-
-# ## create a shared directory which is open to every one (for now).
-# sudo chmod ugo+rwx /home/shared
 
 ## where all user software lies
 SW_DIR=/home/$USER/software
@@ -34,7 +33,8 @@ cd /home/$USER
 
 ## install brave browser
 yay -Syu --noconfirm
-yay -S --noconfirm brave-bin
+yay -S --noconfirm brave-bin \
+                   gnome-browser-connector 
 
 ## fix speakers and microphone
 pulseaudio --start
@@ -107,15 +107,6 @@ git config --global init.defaultBranch main
 ## install spotify
 sudo pacman -S --noconfirm spotify-launcher
 spotify-launcher
-
-# remove root filesys access for users
-# VISUDO_ROOT_RULE="%users  ALL=(root)    FILEREAD, FILEMOD, SERVICES, EDITORS, POWER"
-# VISUDO_NEW_ROOT_RULE="%users  ALL=(root)    SERVICES, EDITORS, POWER"
-# sudo sed -i "s/$VISUDO_ROOT_RULE/$VISUDO_NEW_ROOT_RULE/g" /etc/sudoers
-
-## relogin for zsh changes to take effect.  
-# logout
-
 
 ## following this, you'll have to maually configure the following installed services. 
 # 1. spotify
