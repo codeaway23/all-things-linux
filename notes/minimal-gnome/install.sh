@@ -39,6 +39,11 @@ yay -Syu --noconfirm
 yay -S --noconfirm brave-bin \
                    gnome-browser-connector 
 
+## restore gnome-shell extensions backups
+mkdir -p /home/$USER/.local/share/gnome-shell/extensions
+cp -r /home/shared/all-things-linux/notes/minimal-gnome/configs/gnome-shell-extensions \
+      /home/$USER/.local/share/gnome-shell/extensions
+
 ## fix speakers and microphone
 pulseaudio --start
 
