@@ -5,11 +5,16 @@ sudo pacman -Syu --noconfirm linux-firmware xorg-server \
                              gdm gnome-shell gnome-terminal mutter \
                              network-manager-applet gnome-keyring \
                              gnome-backgrounds gnome-control-center \
+                             gnome-tweaks \
+                             gnome-shell-extensions \
                              xdg-user-dirs-gtk \
                              ntfs-3g \
                              eog totem evince file-roller nemo \
                              curl wget jq \
                              git
+
+## enable gdm
+sudo systemctl enable gdm
 
 ## generate the arch manual database
 sudo pacman -S --noconfirm man-db man-pages && mandb
@@ -17,9 +22,6 @@ sudo pacman -S --noconfirm man-db man-pages && mandb
 ## handling home directory creation all users present including this one.
 sudo mkhomedir_helper $USER
 LC_ALL=C xdg-user-dirs-update --force
-
-# ## create a shared directory which is open to every one (for now).
-# sudo chmod ugo+rwx /home/shared
 
 ## where all user software lies
 SW_DIR=/home/$USER/software
@@ -34,7 +36,13 @@ cd /home/$USER
 
 ## install brave browser
 yay -Syu --noconfirm
-yay -S --noconfirm brave-bin
+yay -S --noconfirm brave-bin \
+                   gnome-browser-connector 
+
+## restore gnome-shell extensions backups
+mkdir -p /home/$USER/.local/share/gnome-shell/extensions
+cp -r /home/shared/all-things-linux/notes/minimal-gnome/configs/gnome-shell-extensions \
+      /home/$USER/.local/share/gnome-shell/extensions
 
 ## fix speakers and microphone
 pulseaudio --start
@@ -53,8 +61,9 @@ sudo systemctl start reflector.service
 
 ## shell, font and theme
 sudo pacman -S --noconfirm zsh gsfonts
-yay -S --noconfirm powerline-fonts-git ttf-font-awesome ttf-jetbrains-mono ttf-fira-code ttf-iosevka ttf-monoid otf-hasklig \
-                   ttf-ms-fonts                  
+yay -S --noconfirm powerline-fonts-git ttf-font-awesome ttf-jetbrains-mono \
+                   ttf-fira-code ttf-iosevka ttf-monoid otf-hasklig \
+                   ttf-ms-fonts noto-fonts-emoji
 
 0>/dev/null sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 git clone https://github.com/zsh-users/zsh-autosuggestions $HOME/.oh-my-zsh/plugins/zsh-autosuggestions
@@ -64,6 +73,9 @@ sed -i 's/^ZSH_THEME=\"robbyrussell\"*/ZSH_THEME=\"powerlevel10k\/powerlevel10k\
 sed -i 's/^plugins=(git)*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/g' $HOME/.zshrc
 sed -i 's/.*ENABLE_CORRECTION=\"true\"*/ENABLE_CORRECTION=\"true\"/g' $HOME/.zshrc
 chsh -s $(which zsh)
+
+sudo pacman -S --noconfirm neofetch
+echo "neofetch" >> $HOME/.zshrc
 
 ## work - desktop applications
 yay -S --noconfirm slack-desktop
@@ -107,15 +119,6 @@ git config --global init.defaultBranch main
 ## install spotify
 sudo pacman -S --noconfirm spotify-launcher
 spotify-launcher
-
-# remove root filesys access for users
-# VISUDO_ROOT_RULE="%users  ALL=(root)    FILEREAD, FILEMOD, SERVICES, EDITORS, POWER"
-# VISUDO_NEW_ROOT_RULE="%users  ALL=(root)    SERVICES, EDITORS, POWER"
-# sudo sed -i "s/$VISUDO_ROOT_RULE/$VISUDO_NEW_ROOT_RULE/g" /etc/sudoers
-
-## relogin for zsh changes to take effect.  
-# logout
-
 
 ## following this, you'll have to maually configure the following installed services. 
 # 1. spotify
