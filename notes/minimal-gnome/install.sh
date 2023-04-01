@@ -61,8 +61,9 @@ sudo systemctl start reflector.service
 
 ## shell, font and theme
 sudo pacman -S --noconfirm zsh gsfonts
-yay -S --noconfirm powerline-fonts-git ttf-font-awesome ttf-jetbrains-mono ttf-fira-code ttf-iosevka ttf-monoid otf-hasklig \
-                   ttf-ms-fonts                  
+yay -S --noconfirm powerline-fonts-git ttf-font-awesome ttf-jetbrains-mono \
+                   ttf-fira-code ttf-iosevka ttf-monoid otf-hasklig \
+                   ttf-ms-fonts noto-fonts-emoji
 
 0>/dev/null sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 git clone https://github.com/zsh-users/zsh-autosuggestions $HOME/.oh-my-zsh/plugins/zsh-autosuggestions
