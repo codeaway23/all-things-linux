@@ -39,11 +39,6 @@ yay -Syu --noconfirm
 yay -S --noconfirm brave-bin \
                    gnome-browser-connector 
 
-## restore gnome-shell extensions backups
-mkdir -p /home/$USER/.local/share/gnome-shell/extensions
-cp -r /home/shared/all-things-linux/notes/minimal-gnome/configs/gnome-shell-extensions \
-      /home/$USER/.local/share/gnome-shell/extensions
-
 ## fix speakers and microphone
 pulseaudio --start
 
@@ -77,54 +72,3 @@ chsh -s $(which zsh)
 sudo pacman -S --noconfirm neofetch
 echo "neofetch" >> $HOME/.zshrc
 
-## work - desktop applications
-yay -S --noconfirm slack-desktop
-
-## work - VPN setup
-sudo pacman -S --noconfirm openfortivpn
-sudo cp /home/shared/all-things-linux/notes/minimal-gnome/configs/openfortivpn/config /etc/openfortivpn/config
-
-## work - dev tools
-DL_DIR=/home/$USER/Downloads
-mkdir -p $SW_DIR
-mkdir -p $DL_DIR
-cd $DL_DIR
-curl -L -O https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-bash Miniconda3-latest-Linux-x86_64.sh
-curl https://github.com/elastic/elasticsearch/archive/refs/tags/v8.6.2.tar.gz -o elasticsearch.tar.gz
-curl https://github.com/elastic/kibana/archive/refs/tags/v8.6.2.tar.gz -o kibana.tar.gz
-curl https://github.com/elastic/logstash/archive/refs/tags/v8.6.2.tar.gz -o logstash.tar.gz
-tar -xvzf elasticsearch.tar.gz -C $SW_DIR
-tar -xvzf kibana.tar.gz -C $SW_DIR
-tar -xvzf logstash.tar.gz $SW_DIR
-rm $DL_DIR/*
-sudo pacman -S --noconfirm postgresql mariadb \
-                           rclone \
-                           docker docker-compose
-yay -S --noconfirm  postman-bin \
-                    mongodb-bin
-
-## work - vs-code-insiders - with extensions
-yay -S --noconfirm visual-studio-code-insiders-bin
-cat /home/shared/all-things-linux/notes/minimal-gnome/configs/vscode-insiders/extensions-list.txt | xargs -n 1 code-insiders --install-extension
-
-## work - install google calendar, gmail on thunderbird
-sudo pacman -S --noconfirm thunderbird
-
-## work - configure git global
-git config --global user.name "Anuj Sable"
-git config --global user.email "anujsablework@gmail.com"
-git config --global init.defaultBranch main
-
-## install spotify
-sudo pacman -S --noconfirm spotify-launcher
-spotify-launcher
-
-## following this, you'll have to maually configure the following installed services. 
-# 1. spotify
-# 2. thunderbird
-# 3. postman
-# 4. visual studio
-# 5. slack
-# 6. brave browser
-# 7. zsh, oh-my-zsh, p10k
