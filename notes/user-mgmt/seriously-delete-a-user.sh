@@ -1,5 +1,10 @@
 #!/bin/sh
 
+if [ $# -ne 1 ]; then
+	echo "Wrong arguments. First(only) argument: username"
+	exit
+fi
+
 sudo passwd -l $1
 sudo pkill -KILL -u $1
 

@@ -1,13 +1,16 @@
 #!/bin/sh
 
-YOUR_HOSTNAME=overdrive
+if [ $# -ne 1 ]; then
+	echo "Wrong arguments. First(only) argument: username"
+	exit
+fi
 
 timedatectl set-timezone Asia/Calcutta
 systemctl enable systemd-timesyncd
 
-hostnamectl set-hostname $YOUR_HOSTNAME
+hostnamectl set-hostname $1
 
-ETC_HOSTS="127.0.0.1 localhost $YOUR_HOSTNAME
-::1 localhost $YOUR_HOSTNAME"
+ETC_HOSTS="127.0.0.1 localhost $1
+::1 localhost $1"
 
 echo "$ETC_HOSTS" > /etc/hosts
