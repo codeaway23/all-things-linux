@@ -19,6 +19,7 @@ partition table is built using `cfdisk` as follows
 following that, run the following command.
 ```bash
 bash lvm-luks-partition.sh
+
 ```
 
 the script above will format your drive, partition it, create physical volumes, volume groups and 
@@ -31,28 +32,47 @@ then, run the following commands.
 arch-chroot /mnt
 mkdir -p /home/shared/
 cd /home/shared
+pacman -Syu git
 git clone https://github.com/codeaway23/all-things-linux.git
 ```
 
-go into the `all-things-linux/notes/arch-install` folder. 
+`cd` into the `all-things-linux/notes/arch-install` folder. 
 
 following that, run the following command. 
 ```bash
-bash arch-packages.sh
+bash arch-packages.sh --name <username> --xorg
 ```
+or 
+```bash
+bash arch-packages.sh --name <username> --wayland
+```
+depending on your requirements.
 
 this script will install the linux kernel and all the basic packages needed for a functional arch 
-system. it will also set locale, set a root password and create a user in the wheel 
-group called admin. i have currently given up on user management. but it will give your wheel user sudo 
+system. it will also set locale, set a root password and create a user of your choice in the wheel 
+group. i have currently given up on user management. but it will give your wheel group sudo 
 access.
 
-following that, run the following command.
-```bash
-bash grub-install-setup.sh
+following that, again depending on your requiements, run the following.
+``bash
+bash grub-install-setup.sh --xorg
+```
+or 
+```bash 
+bash grub-install-setup.sh --wayland
 ```
 
 this will install grub related packages, install grub on your boot drive and configure it as required.
 after the installation, it will exit the chroot environment. 
+
+now. we will configure initramfs. depending on your requirements, run the following.
+```bash 
+bash initramfs-setup.sh --xorg
+```
+or 
+```bash
+bash initramfs-setup-.sh --wayland
+```
 
 here, exit chroot environment, re-generate the `fstab` file to include the EFI parition as follows. 
 ```bash

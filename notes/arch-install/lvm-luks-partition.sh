@@ -9,7 +9,7 @@ cryptsetup luksOpen $DISK_ARCH arch
 
 pvcreate --dataalignment 1M /dev/mapper/arch
 vgcreate vg00 /dev/mapper/arch
-lvcreate -L 50G -n lv-root vg00
+lvcreate -L 30G -n lv-root vg00
 lvcreate -l 100%FREE -n lv-home vg00
 
 modprobe dm_mod
@@ -23,7 +23,6 @@ mkfs.xfs /dev/vg00/lv-home
 
 mount /dev/vg00/lv-root /mnt
 btrfs su cr /mnt/@
-btrfs su cr /mnt/@home
 btrfs su cr /mnt/@root
 btrfs su cr /mnt/@srv
 btrfs su cr /mnt/@log
@@ -36,7 +35,6 @@ mount -o defaults,noatime,compress=zstd,commit=120,subvol=@ /dev/vg00/lv-root /m
 
 mkdir -p /mnt/{home,root,srv,var/log,var/cache,tmp}
 
-mount -o defaults,noatime,compress=zstd,commit=120,subvol=@home /dev/vg00/lv-root /mnt/home
 mount -o defaults,noatime,compress=zstd,commit=120,subvol=@root /dev/vg00/lv-root /mnt/root
 mount -o defaults,noatime,compress=zstd,commit=120,subvol=@srv /dev/vg00/lv-root /mnt/srv
 mount -o defaults,noatime,compress=zstd,commit=120,subvol=@log /dev/vg00/lv-root /mnt/var/log
@@ -50,4 +48,4 @@ mount $DISK_BOOT /mnt/boot
 
 genfstab -U -p /mnt > /mnt/etc/fstab
 
-pacstrap -i /mnt base git
+pacstrap -i /mnt base
