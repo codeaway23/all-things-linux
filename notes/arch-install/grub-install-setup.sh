@@ -6,15 +6,15 @@ if [ $# -eq 0 ]; then
 elif [ $# -gt 1 ]; then
 	echo "Only one argument allowed. Valid options: --xorg or --wayland"
 	exit 1
-elif [$1 != "--xorg" || $1 != "--wayland"]; then
+elif [ $1 != "--xorg" || $1 != "--wayland" ]; then
 	echo "Invalid argument. Valid options: --xorg or --wayland"
 fi
 
 
 
-if [$1 == "--xorg"]; then
+if [ $1 == "--xorg" ]; then
 	CRYPTDEVICE_SETTINGS="GRUB_CMDLINE_LINUX_DEFAULT=\"cryptdevice=\/dev\/nvme0n1p3:vg00:allow-discards loglevel=3 quiet\""
-elif [$1 == "--wayland"]
+elif [ $1 == "--wayland" ]; then
 	CRYPTDEVICE_SETTINGS="GRUB_CMDLINE_LINUX_DEFAULT=\"cryptdevice=\/dev\/nvme0n1p3:vg00:allow-discards loglevel=3 quiet nvidia-drm.modeset=1\""
 else
 	echo "Wrong argument supplied. Valid options: xorg/wayland"

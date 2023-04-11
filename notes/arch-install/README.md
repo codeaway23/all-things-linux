@@ -25,7 +25,7 @@ bash lvm-luks-partition.sh
 the script above will format your drive, partition it, create physical volumes, volume groups and 
 logical volumes for home and root. the btrfs file system will have several subvolumes created as 
 well. finally, it will mount all of these, use pactstrap and get you arch-chroot acccess to the 
-installation. it will also move this git repository into `/mnt/home/shared/` directory. 
+installation. 
 
 then, run the following commands. 
 ```bash
@@ -90,7 +90,7 @@ if everything went well, your arch installation is done.
 
 make some minor tweaks using the following script. make sure to login as root. 
 ```bash
-bash post-installation.sh
+bash post-installation.sh <hostname>
 ```
 
 and you're done. you can move on to installing a window manager and a desktop environment. it is 

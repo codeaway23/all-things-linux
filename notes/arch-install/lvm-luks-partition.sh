@@ -46,6 +46,4 @@ mount /dev/vg00/lv-home /mnt/home
 mkdir -p /mnt/boot
 mount $DISK_BOOT /mnt/boot
 
-genfstab -U -p /mnt > /mnt/etc/fstab
-
 pacstrap -i /mnt base

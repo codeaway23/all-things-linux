@@ -7,7 +7,7 @@ if [ $# -ne 3 ]; then
 elif [ $1 != "--name" ]; then
 	echo "First argument must be --name"
 	exit
-elif [$3 != "--xorg" || $3 != "--wayland"]; then
+elif [ $3 != "--xorg" || $3 != "--wayland" ]; then
 	echo "Invalid argument. Valid options: --xorg or --wayland"
 fi
 
@@ -25,13 +25,11 @@ pacman -S base-devel \
           neovim \
           openssh \
           networkmanager wpa_supplicant netctl wireless_tools dialog \
-          lvm2 \
-	  nvidia-lts nvidia-utils \
-	  amd-ucode
+          lvm2
 
 if [ $3 == "--xorg" ]; then
 	pacman -S xorg
-elif [ $3 == "--wayland"]; then
+elif [ $3 == "--wayland" ]; then
 	pacman -S wayland
 fi
 

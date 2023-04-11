@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ $# -ne 1 ]; then
-	echo "Wrong arguments. First(only) argument: username"
+	echo "Wrong arguments. First(only) argument: hostname"
 	exit
 fi
 
@@ -14,3 +14,5 @@ ETC_HOSTS="127.0.0.1 localhost $1
 ::1 localhost $1"
 
 echo "$ETC_HOSTS" > /etc/hosts
+
+pacman -Syu nvidia-lts nvidia-utils amd-ucode
