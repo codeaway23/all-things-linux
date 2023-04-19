@@ -48,10 +48,7 @@ if [ -d /etc/X11/xinit/xinitrc.d ] ; then
  unset f
 fi
 
-
-setxkbmap us &
 xsetroot -cursor_name left_ptr
-nitrogen --restore &
-lxsession &
-picom &
+~/.fehbg &
+picom -f -i 0.9 -e 0.97 --active-opacity 0.95 --config /dev/null &
 exec bspwm

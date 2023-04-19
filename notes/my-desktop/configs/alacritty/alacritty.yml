@@ -1,0 +1,39 @@
+# https://sunnnychan.github.io/cheatsheet/linux/config/alacritty.yml.html
+env:
+  WINIT_X11_SCALE_FACTOR: "1"
+
+window:
+  padding:
+    x: 10
+    y: 10
+
+scrolling:
+  history: 100000
+  multiplier: 3
+
+font:
+  normal:
+    family: Fira Code
+    style: Regular
+  bold:
+    family: Fira Code
+    style: Bold
+  italic:
+    family: Fira Code
+    style: Italic
+  size: 14
+
+draw_bold_text_with_bright_colors: true
+
+selection:
+  semantic_escape_chars: ",│`|:\"' ()[]{}<>\t"
+  save_to_clipboard: true
+
+window.dynamic_title: true
+
+cursor:
+  style: Underline
+
+live_config_reload: true
+
+

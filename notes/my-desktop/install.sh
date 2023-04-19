@@ -2,19 +2,16 @@
 
 ## minimal sofotware installation for a functional system
 sudo pacman -S xorg xorg-init \
-	       lxsession \
 	       bspwm sxhkd \
 	       alacritty \
 	       picom \
-	       nitrogen \
-	       xrandr \
+		   xrandr \
 	       rofi \
-	       lemonbar plank \
-		   rsync \
-		   bluez bluez-utils \
-		   alsa-utils pulseaudio pulseaudio-bluetooth \
-	       ranger zsh neovim tmux
-
+	       polybar \ 
+	       rsync \
+	       bluez bluez-utils \
+	       alsa-utils pulseaudio pulseaudio-bluetooth \
+	       ranger zsh neovim
 
 ## where all user software lies
 SW_DIR=/home/$USER/software
@@ -34,8 +31,10 @@ yay -Syu --noconfirm brave-bin
 pulseaudio --start
 
 ## start bluetooth
+rfkill unblock bluetooth
 sudo systemctl enable bluetooth
 sudo systemctl start bluetooth
+yay -S --noconfirm bluetuith
 
 ## arch mirrors synchronization
 sudo pacman -S --noconfirm reflector
@@ -60,18 +59,45 @@ sed -i 's/^plugins=(git)*/plugins=(git zsh-autosuggestions zsh-syntax-highlighti
 sed -i 's/.*ENABLE_CORRECTION=\"true\"*/ENABLE_CORRECTION=\"true\"/g' $HOME/.zshrc
 chsh -s $(which zsh)
 
+echo -en '\n\n' >> $HOME/.zshrc
+echo "EDITOR=nvim" >> $HOME/.zshrc
+echo "VISUAL=nvim" >> $HOME/.zshrc
+
+echo -en '\n\n' >> $HOME/.zshrc
 sudo pacman -S --noconfirm neofetch
 echo "neofetch" >> $HOME/.zshrc
 
-## configs
+## install spotify
+yay -S --noconfirm spotify
+
+### configuration
 CONFIG_DIR=/home/$USER/.config
-mkdir $CONFIG_DIR
-cp -r configs $CONFIG_DIR
+mkdir -p $CONFIG_DIR
+
+cp -r configs/* $CONFIG_DIR
+
+cd $SW_DIR
+
+## rofi
+git clone --depth=1 https://github.com/adi1090x/rofi.git
+cd rofi
+chmod +x setup.sh
+./setup.sh
+cd ..
+rm -r rofi
+
+sed -i "s/^theme='style-1'/theme='style-5'/g" $CONFIG_DIR/rofi/scripts/launcher_t1
 
 
-## executables
-chmod +x $CONFIG_DIR/xinit/xinitrc
+## polybar
+git clone --depth=1 https://github.com/adi1090x/polybar-themes.git
+cd polybar-themes
+chmod +x setup.sh
+./setup.sh
+cd ..
+rm -r polybar-themes
 
-## symlinking
+
+## symlinks
 ln -s $CONFIG_DIR/xinit/xinitrc /home/$USER/.xinitrc
-# ln -s $CONFIG_DIR/alsa/asoundrc /home/$USER/.asoundrc
+ln -s $CONFIG_DIR/alsa/asoundrc /home/$USER/.asoundrc

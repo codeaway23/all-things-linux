@@ -25,6 +25,8 @@ yay -S --noconfirm  postman-bin \
                     mongodb-bin
 ## work - vs-code-insiders - with extensions
 yay -S --noconfirm visual-studio-code-insiders-bin
+## work - slack desktop
+yay -S --noconfirm slack-desktop
 ## work - configure git global
 git config --global user.name "Anuj Sable"
 git config --global user.email "anujsablework@gmail.com"
