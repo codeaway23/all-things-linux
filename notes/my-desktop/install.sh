@@ -1,17 +1,18 @@
 #! /bin/sh
 
 ## minimal sofotware installation for a functional system
-sudo pacman -Syu xorg-xinit xorg-xrandr \
-		 bspwm sxhkd \
-		 alacritty \
-		 picom \
-		 rofi \
-		 polybar \
-		 rsync \
-		 bluez bluez-utils \
-		 alsa-utils pulseaudio pulseaudio-bluetooth \
-		 ranger zsh neovim xclip \
-		 lightdm lightdm-gtk-greeter
+sudo pacman -Syu linux-firmware \
+	xorg-xinit xorg-xrandr \
+	bspwm sxhkd \
+	alacritty \
+	picom \
+	rofi \
+	polybar \
+	rsync \
+	bluez bluez-utils \
+	alsa-utils pulseaudio pulseaudio-bluetooth \
+	ranger zsh neovim xclip stow \
+	lightdm lightdm-gtk-greeter
 
 ## set up lightdm
 sudo sed -i "s/^greeter-session=.*/greeter-session=lightdm-gtk-greeter/g" /etc/lightdm/lightdm.conf
@@ -74,16 +75,16 @@ sudo pacman -S --noconfirm neofetch
 echo "neofetch" >> $HOME/.zshrc
 
 ## install spotify
-yay -S --noconfirm spotify
+yay -S --noconfirm spotify-launcher
 
 ### configuration
 CONFIG_DIR=/home/$USER/.config
 mkdir -p $CONFIG_DIR
 
-cp -r $SW_DIR/all-things-linux/notes/my-desktop/configs/* $CONFIG_DIR
+# symbolic link manager
+stow --dir=$SW_DIR/all-things-linux/notes/my-desktop/config/ --target=/home/$USER .
 
 cd $SW_DIR
-
 ## rofi
 git clone --depth=1 https://github.com/adi1090x/rofi.git
 cd rofi
@@ -91,10 +92,7 @@ chmod +x setup.sh
 ./setup.sh
 cd ..
 rm -r rofi
-
 sed -i "s/^theme='style-1'/theme='style-5'/g" $CONFIG_DIR/rofi/scripts/launcher_t1
-
-
 ## polybar
 git clone --depth=1 https://github.com/adi1090x/polybar-themes.git
 cd polybar-themes
@@ -102,8 +100,3 @@ chmod +x setup.sh
 ./setup.sh
 cd ..
 rm -r polybar-themes
-
-
-## symlinks
-ln -s $CONFIG_DIR/xinit/xinitrc /home/$USER/.xinitrc
-ln -s $CONFIG_DIR/alsa/asoundrc /home/$USER/.asoundrc
