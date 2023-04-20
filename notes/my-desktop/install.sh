@@ -100,3 +100,8 @@ chmod +x setup.sh
 ./setup.sh
 cd ..
 rm -r polybar-themes
+
+## systemd services
+systemctl --user daemon-reload
+systemctl --user enable low-battery-notification
+systemctl --user start low-batter-notification

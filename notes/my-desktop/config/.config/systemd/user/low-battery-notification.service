@@ -1,0 +1,11 @@
+[Unit]
+Description=Notify using Dunstify when battery is 10%
+Before=shutdown.target
+
+[Service]
+ExecStart=sh /home/anuj/.config/systemd/scripts/low-battery-notification.sh
+Type=notify
+Restart=always
+
+[Install]
+WantedBy=default.target
