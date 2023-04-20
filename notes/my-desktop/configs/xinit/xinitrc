@@ -49,17 +49,4 @@ if [ -d /etc/X11/xinit/xinitrc.d ] ; then
 fi
 
 
-xsetroot -cursor_name left_ptr
-
-~/.fehbg &
-
-picom --config ~/.config/picom/picom.conf &
-
-killall dunst && dunst &
-
-## set up track pad
-TRACKPAD_ID=$(xinput list | grep Touchpad | cut -d'=' -f2- | cut -b 1-2)
-TAP_ENABLED=$(xinput list-props $TRACKPAD_ID | grep "Tapping Enabled (" | cut -d'(' -f2- | rev | cut -d ')' -f2- | rev)
-echo $TAP_ENABLED | xargs -I {} xinput set-prop $TRACKPAD_ID {} 1
-
 exec bspwm

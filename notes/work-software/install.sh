@@ -2,6 +2,7 @@
 
 ## work - dev tools
 DL_DIR=/home/$USER/Downloads
+SW_DIR=/home/$USER/software
 mkdir -p $SW_DIR
 mkdir -p $DL_DIR
 cd $DL_DIR

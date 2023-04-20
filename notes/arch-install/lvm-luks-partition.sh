@@ -23,7 +23,6 @@ mkfs.btrfs /dev/vg00/lv-home
 
 mount /dev/vg00/lv-root /mnt
 btrfs su cr /mnt/@
-btrfs su cr /mnt/@home
 btrfs su cr /mnt/@root
 btrfs su cr /mnt/@srv
 btrfs su cr /mnt/@log
@@ -42,9 +41,9 @@ mount -o defaults,noatime,compress=zstd,commit=120,subvol=@log /dev/vg00/lv-root
 mount -o defaults,noatime,compress=zstd,commit=120,subvol=@cache /dev/vg00/lv-root /mnt/var/cache
 mount -o defaults,noatime,compress=zstd,commit=120,subvol=@tmp /dev/vg00/lv-root /mnt/tmp
 
-mount -o defaults,noatime,compress=zstd,commit=120,subvol=@home /dev/vg00/lv-home /mnt/home
+mount /dev/vg00/lv-home /mnt/home
 
 mkdir -p /mnt/boot
 mount $DISK_BOOT /mnt/boot
 
-pacstrap -i /mnt base git
+pacstrap -i /mnt base git neovim

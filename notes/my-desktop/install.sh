@@ -1,18 +1,21 @@
 #! /bin/sh
 
 ## minimal sofotware installation for a functional system
-sudo pacman -S xorg-init \
-	       bspwm sxhkd \
-	       alacritty \
-	       picom \
-		   xrandr \
-	       rofi \
-	       polybar \ 
-		   dunst \
-		   rsync \
-	       bluez bluez-utils \
-	       alsa-utils pulseaudio pulseaudio-bluetooth \
-	       ranger zsh neovim
+sudo pacman -Syu xorg-xinit xorg-xrandr \
+		 bspwm sxhkd \
+		 alacritty \
+		 picom \
+		 rofi \
+		 polybar \
+		 rsync \
+		 bluez bluez-utils \
+		 alsa-utils pulseaudio pulseaudio-bluetooth \
+		 ranger zsh neovim xclip \
+		 lightdm lightdm-gtk-greeter
+
+## set up lightdm
+sudo sed -i "s/^greeter-session=.*/greeter-session=lightdm-gtk-greeter/g" /etc/lightdm/lightdm.conf
+sudo systemctl enable lightdm -f
 
 ## where all user software lies
 SW_DIR=/home/$USER/software
@@ -24,6 +27,9 @@ git clone https://aur.archlinux.org/yay.git
 cd yay
 makepkg -si
 cd /home/$USER
+
+## set up some software
+yay -Syu --noconfirm neovim-plug dunst
 
 ## install brave browser
 yay -Syu --noconfirm brave-bin 
@@ -74,7 +80,7 @@ yay -S --noconfirm spotify
 CONFIG_DIR=/home/$USER/.config
 mkdir -p $CONFIG_DIR
 
-cp -r configs/* $CONFIG_DIR
+cp -r $SW_DIR/all-things-linux/notes/my-desktop/configs/* $CONFIG_DIR
 
 cd $SW_DIR
 
