@@ -33,6 +33,9 @@ elif [ $3 == "--wayland" ]; then
 	pacman -S wayland
 fi
 
+pacman -S nvidia-lts nvidia-utils \
+		  amd-ucode
+
 sed -i "s/#en_IN.*/en_IN UTF-8/g" /etc/locale.gen
 locale-gen
 

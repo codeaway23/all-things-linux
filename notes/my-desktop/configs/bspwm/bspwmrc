@@ -1,16 +1,17 @@
 #! /bin/sh
 
 ## these can go into xinitrc later
-xsetroot -cursor_name left_ptr
-~/.fehbg &
-picom -f -i 0.9 -e 0.97 --active-opacity 0.95 --config /dev/null &
+# xsetroot -cursor_name left_ptr
+# ~/.fehbg &
+# picom --config ~/.config/picom/picom.conf &
+# killall dunst && dunst &
+## set up track pad
+# TRACKPAD_ID=$(xinput list | grep Touchpad | cut -d'=' -f2- | cut -b 1-2)
+# TAP_ENABLED=$(xinput list-props $TRACKPAD_ID | grep "Tapping Enabled (" | cut -d'(' -f2- | rev | cut -d ')' -f2- | rev)
+# echo $TAP_ENABLED | xargs -I {} xinput set-prop $TRACKPAD_ID {} 1
+
 
 pgrep -x sxhkd > /dev/null || sxhkd &
-
-## set up track pad
-TRACKPAD_ID=$(xinput list | grep Touchpad | cut -d'=' -f2- | cut -b 1-2)
-TAP_ENABLED=$(xinput list-props $TRACKPAD_ID | grep "Tapping Enabled (" | cut -d'(' -f2- | rev | cut -d ')' -f2- | rev)
-echo $TAP_ENABLED | xargs -I {} xinput set-prop $TRACKPAD_ID {} 1
 
 bspc monitor -d I II III IV V VI VII VIII IX X
 

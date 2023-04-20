@@ -23,13 +23,13 @@ super + space
 # volume and brightness
 #
 
-# volume
-XF86AudioLowerVolume
-	amixer set Master 5%-
+#Volume Control
 XF86AudioRaiseVolume
-	amixer set Master 5%+
+    pactl set-sink-volume 1 +5%
+XF86AudioLowerVolume
+    pactl set-sink-volume 1 -5%
 XF86AudioMute
-	amixer set Master toggle
+    pactl set-sink-mute 1 toggle
 
 # brightness
 XF86MonBrightnessDown

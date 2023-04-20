@@ -1,14 +1,15 @@
 #! /bin/sh
 
 ## minimal sofotware installation for a functional system
-sudo pacman -S xorg xorg-init \
+sudo pacman -S xorg-init \
 	       bspwm sxhkd \
 	       alacritty \
 	       picom \
 		   xrandr \
 	       rofi \
 	       polybar \ 
-	       rsync \
+		   dunst \
+		   rsync \
 	       bluez bluez-utils \
 	       alsa-utils pulseaudio pulseaudio-bluetooth \
 	       ranger zsh neovim
@@ -34,7 +35,6 @@ pulseaudio --start
 rfkill unblock bluetooth
 sudo systemctl enable bluetooth
 sudo systemctl start bluetooth
-yay -S --noconfirm bluetuith
 
 ## arch mirrors synchronization
 sudo pacman -S --noconfirm reflector
