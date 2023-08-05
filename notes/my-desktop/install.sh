@@ -4,15 +4,16 @@
 sudo pacman -Syu linux-firmware \
 	xorg-xinit xorg-xrandr \
 	bspwm sxhkd \
-	alacritty \
+	alacritty kitty \
 	picom \
 	rofi \
 	polybar \
-	rsync \
+	btrfs-progs ntfs-3g rsync thunar file-roller \
 	bluez bluez-utils \
-	alsa-utils pulseaudio pulseaudio-bluetooth \
+	alsa-utils pulseaudio pulseaudio-bluetooth pavucontrol pamixer \
 	ranger zsh neovim xclip stow \
-	lightdm lightdm-gtk-greeter
+	lightdm lightdm-gtk-greeter \
+	cronie
 
 ## set up lightdm
 sudo sed -i "s/^greeter-session=.*/greeter-session=lightdm-gtk-greeter/g" /etc/lightdm/lightdm.conf
@@ -55,7 +56,8 @@ sudo systemctl start reflector.service
 sudo pacman -S --noconfirm zsh gsfonts
 yay -S --noconfirm powerline-fonts-git ttf-font-awesome ttf-jetbrains-mono \
                    ttf-fira-code ttf-iosevka ttf-monoid otf-hasklig \
-                   ttf-ms-fonts noto-fonts-emoji
+                   ttf-ms-fonts noto-fonts-emoji \
+				   ttf-firacode-nerd
 
 0>/dev/null sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 git clone https://github.com/zsh-users/zsh-autosuggestions $HOME/.oh-my-zsh/plugins/zsh-autosuggestions
@@ -81,8 +83,24 @@ yay -S --noconfirm spotify-launcher
 CONFIG_DIR=/home/$USER/.config
 mkdir -p $CONFIG_DIR
 
-# symbolic link manager
+## install faba icons for dunst brightness/volume bar
+git clone https://github.com/snwh/faba-icon-theme.git  
+cd faba-icon-theme
+sudo pacman -S --noconfirm meson
+meson "build" --prefix=/usr
+sudo ninja -C "build" install
+cd ..
+rm -r faba-icon-theme
+
+## symbolic link manager
 stow --dir=$SW_DIR/all-things-linux/notes/my-desktop/config/ --target=/home/$USER .
+
+## set up cronjobs
+crontab -l > mycron
+echo "*/15 * * * * /bin/sh /home/anuj/.config/cron-jobs/feh-dynamic-wallpaper.sh" >> mycron
+echo "*/5 * * * * /bin/sh /home/anuj/.config/cron-jobs/low-battery-notification.sh" >> mycron
+crontab mycron
+rm mycron
 
 cd $SW_DIR
 ## rofi
@@ -101,7 +119,16 @@ chmod +x setup.sh
 cd ..
 rm -r polybar-themes
 
-## systemd services
-systemctl --user daemon-reload
-systemctl --user enable low-battery-notification
-systemctl --user start low-batter-notification
+## for ranger
+sudo pacman -Syu pygmentize highlight
+
+
+## set up audio for bluetooth and synth
+sudo usermod -G users,wheel,audio $USER
+sudo echo "@audio - memlock unlimited" >> /etc/security/limits.conf
+sudo echo "@audio - rtprio unlimited" >> /etc/security/limits.conf
+sudo echo "load-module module-switch-on-connect" >> /etc/pulse/default.pa
+sudo pacman -Syu helm-synth
+
+
+# reboot

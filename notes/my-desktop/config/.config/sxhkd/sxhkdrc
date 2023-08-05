@@ -4,7 +4,7 @@
 
 # terminal emulator
 super + Return
-	alacritty
+	kitty
 
 # browser launcher
 super + b
@@ -25,18 +25,22 @@ super + space
 
 #Volume Control
 XF86AudioRaiseVolume
-    pactl set-sink-volume 0 +5% && pactl set-sink-volume 1 +5% 
+    sh ~/.config/dunst/dunst-volume-brightness/vol.sh up
 XF86AudioLowerVolume
-    pactl set-sink-volume 0 -5% && pactl set-sink-volume 1 -5% 
+    sh ~/.config/dunst/dunst-volume-brightness/vol.sh down
 XF86AudioMute
-    pactl set-sink-mute 0 toggle && pactl set-sink-mute 1 toggle
+    sh ~/.config/dunst/dunst-volume-brightness/vol.sh mute
 
 # brightness
 XF86MonBrightnessDown
-	xbacklight -dec 5
+    sh ~/.config/dunst/dunst-volume-brightness/bri.sh down
 XF86MonBrightnessUp
-	xbacklight -inc 5
+    sh ~/.config/dunst/dunst-volume-brightness/bri.sh up
 
+
+#
+# reloads, kills
+#
 
 # make sxhkd reload its configuration files:
 super + Escape
@@ -50,6 +54,11 @@ super + alt + {q,r}
 super + {_,shift + }q
 	bspc node -{c,k}
 
+
+#
+# big window swaps
+#
+
 # alternate between the tiled and monocle layout
 super + m
 	bspc desktop -l next
@@ -62,6 +71,7 @@ super + y
 super + g
 	bspc node -s biggest.window
 
+
 #
 # state/flags
 #
@@ -73,6 +83,7 @@ super + {t,shift + t,s,f}
 # set the node flags
 super + ctrl + {m,x,y,z}
 	bspc node -g {marked,locked,sticky,private}
+
 
 #
 # focus/swap
@@ -108,6 +119,7 @@ super + {o,i}
 super + {_,shift + }{1-9,0}
 	bspc {desktop -f,node -d} '^{1-9,10}'
 
+
 #
 # preselect
 #
@@ -127,6 +139,7 @@ super + ctrl + space
 # cancel the preselection for the focused desktop
 super + ctrl + shift + space
 	bspc query -N -d | xargs -I id -n 1 bspc node id -p cancel
+
 
 #
 # move/resize
