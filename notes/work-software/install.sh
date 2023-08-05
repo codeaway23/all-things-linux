@@ -17,17 +17,18 @@ tar -xvzf elasticsearch.tar.gz -C $SW_DIR
 tar -xvzf kibana.tar.gz -C $SW_DIR
 tar -xvzf logstash.tar.gz $SW_DIR
 rm $DL_DIR/*
-## work - databases, docker, fortclient vpn
+## work - databases, docker
 sudo pacman -S --noconfirm postgresql mariadb \
                            rclone \
-                           docker docker-compose \
-			   openfortivpn
+                           docker docker-compose
 yay -S --noconfirm  postman-bin \
                     mongodb-bin
-## work - vs-code-insiders - with extensions
-yay -S --noconfirm visual-studio-code-insiders-bin
-## work - slack desktop
-yay -S --noconfirm slack-desktop
+## work - vs-codium
+yay -S --noconfirm vscodium
+## work - R and RStudio
+yay -S --noconfirm r rstudio-desktop
+## work - slack, discord
+yay -S --noconfirm slack-desktop discord
 ## work - configure git global
 git config --global user.name "Anuj Sable"
 git config --global user.email "anujsablework@gmail.com"
