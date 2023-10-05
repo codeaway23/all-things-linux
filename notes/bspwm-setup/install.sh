@@ -129,8 +129,6 @@ sudo pacman -Syu helm-synth
 
 ## work - dev tools
 DL_DIR=/home/$USER/Downloads
-SW_DIR=/home/$USER/software
-mkdir -p $SW_DIR
 mkdir -p $DL_DIR
 cd $DL_DIR
 ## work miniconda setup
@@ -145,9 +143,6 @@ tar -xzf elasticsearch-8.9.0-linux-x86_64.tar.gz
 curl -O https://artifacts.elastic.co/downloads/kibana/kibana-8.9.0-linux-x86_64.tar.gz
 curl https://artifacts.elastic.co/downloads/kibana/kibana-8.9.0-linux-x86_64.tar.gz.sha512 | shasum -a 512 -c - 
 tar -xzf kibana-8.9.0-linux-x86_64.tar.gz
-cd kibana-8.9.0/ 
-
-rm $DL_DIR/*
 # work - databases, docker
 sudo pacman -S --noconfirm postgresql mariadb \
                            rclone \
