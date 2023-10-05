@@ -4,11 +4,11 @@
 
 # terminal emulator
 super + Return
-	alacritty
+	kitty
 
 # browser launcher
 super + b
-	brave
+	firefox &
 
 # spotify launcher
 super + s
@@ -25,17 +25,17 @@ super + space
 
 #Volume Control
 XF86AudioRaiseVolume
-    pactl set-sink-volume 0 +5% && pactl set-sink-volume 1 +5% 
+    sh ~/.config/dunst/vol.sh up
 XF86AudioLowerVolume
-    pactl set-sink-volume 0 -5% && pactl set-sink-volume 1 -5% 
+    sh ~/.config/dunst/vol.sh down
 XF86AudioMute
-    pactl set-sink-mute 0 toggle && pactl set-sink-mute 1 toggle
+    sh ~/.config/dunst/vol.sh mute
 
 # brightness
 XF86MonBrightnessDown
-	xbacklight -dec 5
+    sh ~/.config/dunst/bri.sh down
 XF86MonBrightnessUp
-	xbacklight -inc 5
+    sh ~/.config/dunst/bri.sh up
 
 
 # make sxhkd reload its configuration files:
@@ -153,4 +153,4 @@ super + {Left,Down,Up,Right}
 #
 
 super + shift + Tab
-	dunstify "Today" "$(date +"%a | %b %d %Y | %r")"
+	dunstify "Today" "$(date +"%a | %b %d %Y | %r")" -i "/usr/share/icons/Papirus-Light/24x24/actions/view-calendar-month.svg"
