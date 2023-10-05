@@ -12,11 +12,11 @@ sudo pacman -Syu linux-firmware \
 	bluez bluez-utils \
 	alsa-utils pulseaudio pulseaudio-bluetooth pavucontrol pamixer \
 	ranger zsh neovim xclip stow \
-	lightdm lightdm-gtk-greeter \
-	cronie
+	lightdm lightdm-slick-greeter \
+	lxappearance cronie 
 
 ## set up lightdm
-sudo sed -i "s/^greeter-session=.*/greeter-session=lightdm-gtk-greeter/g" /etc/lightdm/lightdm.conf
+sudo sed -i "s/^greeter-session=.*/greeter-session=lightdm-slick-greeter/g" /etc/lightdm/lightdm.conf
 sudo systemctl enable lightdm -f
 
 ## where all user software lies
@@ -31,10 +31,18 @@ makepkg -si
 cd /home/$USER
 
 ## set up some software
-yay -Syu --noconfirm neovim-plug dunst
+yay -Syu --noconfirm neovim-plug dunst wps-office firefox brave-bin 
 
-## install brave browser
-yay -Syu --noconfirm brave-bin 
+## gtk themes and icons
+yay -S catppuccin-gtk-theme-mocha \
+	catppuccin-gtk-theme-macchiato \
+	catppuccin-gtk-theme-frappe \
+	catppuccin-gtk-theme-latte \
+	adwaita-cursors-git \
+	xcursor-breeze \
+	adwaita-icon-theme \
+	breeze-faba-icon-theme \
+	papirus-icon-theme
 
 ## fix speakers and microphone
 pulseaudio --start
@@ -54,10 +62,13 @@ sudo systemctl start reflector.service
 
 ## shell, font and theme
 sudo pacman -S --noconfirm zsh gsfonts
-yay -S --noconfirm powerline-fonts-git ttf-font-awesome ttf-jetbrains-mono \
-                   ttf-fira-code ttf-iosevka ttf-monoid otf-hasklig \
-                   ttf-ms-fonts noto-fonts-emoji \
-				   ttf-firacode-nerd
+yay -S --noconfirm  ttf-firacode-nerd \
+	ttf-hack-nerd \
+	ttf-inconsolata-nerd \
+	ttf-iosevka-nerd \
+	ttf-meslo-nerd \
+	ttf-wps-fonts  
+
 
 0>/dev/null sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 git clone https://github.com/zsh-users/zsh-autosuggestions $HOME/.oh-my-zsh/plugins/zsh-autosuggestions
@@ -122,7 +133,6 @@ rm -r polybar-themes
 ## for ranger
 sudo pacman -Syu pygmentize highlight
 
-
 ## set up audio for bluetooth and synth
 sudo usermod -G users,wheel,audio $USER
 sudo echo "@audio - memlock unlimited" >> /etc/security/limits.conf
@@ -130,5 +140,7 @@ sudo echo "@audio - rtprio unlimited" >> /etc/security/limits.conf
 sudo echo "load-module module-switch-on-connect" >> /etc/pulse/default.pa
 sudo pacman -Syu helm-synth
 
+## set up crontab
+(crontab -l ; echo "*/15 * * * * /bin/sh /home/anuj/.config/cron-jobs/feh-dynamic-wallpaper.sh")| crontab -
+(crontab -l ; echo "*/5 * * * * /bin/sh /home/anuj/.config/cron-jobs/low-battery-notification.sh")| crontab -
 
-# reboot

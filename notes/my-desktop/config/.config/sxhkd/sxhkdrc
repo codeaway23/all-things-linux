@@ -8,7 +8,7 @@ super + Return
 
 # browser launcher
 super + b
-	brave
+	firefox &
 
 # spotify launcher
 super + s
@@ -25,17 +25,17 @@ super + space
 
 #Volume Control
 XF86AudioRaiseVolume
-    sh ~/.config/dunst/dunst-volume-brightness/vol.sh up
+    sh ~/.config/dunst/vol.sh up
 XF86AudioLowerVolume
-    sh ~/.config/dunst/dunst-volume-brightness/vol.sh down
+    sh ~/.config/dunst/vol.sh down
 XF86AudioMute
-    sh ~/.config/dunst/dunst-volume-brightness/vol.sh mute
+    sh ~/.config/dunst/vol.sh mute
 
 # brightness
 XF86MonBrightnessDown
-    sh ~/.config/dunst/dunst-volume-brightness/bri.sh down
+    sh ~/.config/dunst/bri.sh down
 XF86MonBrightnessUp
-    sh ~/.config/dunst/dunst-volume-brightness/bri.sh up
+    sh ~/.config/dunst/bri.sh up
 
 
 #
@@ -166,4 +166,4 @@ super + {Left,Down,Up,Right}
 #
 
 super + shift + Tab
-	dunstify "Today" "$(date +"%a | %b %d %Y | %r")"
+	dunstify "Today" "$(date +"%a | %b %d %Y | %r")" -i "/usr/share/icons/Papirus-Light/24x24/actions/view-calendar-month.svg"

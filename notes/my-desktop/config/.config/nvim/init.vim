@@ -13,10 +13,6 @@ call plug#begin()
 Plug 'preservim/nerdtree' " NerdTree
 Plug 'ap/vim-css-color' " CSS Color Preview
 Plug 'lunarvim/horizon.nvim' " Horizon Theme
-Plug 'francoiscabrol/ranger.vim' " Ranger
-Plug 'rbgrouleff/bclose.vim' " Ranger + nvim
-
-
 :set encoding=UTF-8
 
 call plug#end()
