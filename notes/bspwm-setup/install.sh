@@ -113,25 +113,13 @@ echo "*/5 * * * * /bin/sh /home/anuj/.config/cron-jobs/low-battery-notification.
 crontab mycron
 rm mycron
 
-cd $SW_DIR
-## rofi
-git clone --depth=1 https://github.com/adi1090x/rofi.git
-cd rofi
-chmod +x setup.sh
-./setup.sh
-cd ..
-rm -r rofi
-sed -i "s/^theme='style-1'/theme='style-5'/g" $CONFIG_DIR/rofi/scripts/launcher_t1
-## polybar
-git clone --depth=1 https://github.com/adi1090x/polybar-themes.git
-cd polybar-themes
-chmod +x setup.sh
-./setup.sh
-cd ..
-rm -r polybar-themes
-
 ## for ranger
 sudo pacman -Syu pygmentize highlight
+
+## set up crontab
+(crontab -l ; echo "*/15 * * * * /bin/sh /home/anuj/.config/cron-jobs/feh-dynamic-wallpaper.sh")| crontab -
+(crontab -l ; echo "*/5 * * * * /bin/sh /home/anuj/.config/cron-jobs/low-battery-notification.sh")| crontab -
+
 
 ## set up audio for bluetooth and synth
 sudo usermod -G users,wheel,audio $USER
@@ -140,7 +128,40 @@ sudo echo "@audio - rtprio unlimited" >> /etc/security/limits.conf
 sudo echo "load-module module-switch-on-connect" >> /etc/pulse/default.pa
 sudo pacman -Syu helm-synth
 
-## set up crontab
-(crontab -l ; echo "*/15 * * * * /bin/sh /home/anuj/.config/cron-jobs/feh-dynamic-wallpaper.sh")| crontab -
-(crontab -l ; echo "*/5 * * * * /bin/sh /home/anuj/.config/cron-jobs/low-battery-notification.sh")| crontab -
+## work - dev tools
+DL_DIR=/home/$USER/Downloads
+SW_DIR=/home/$USER/software
+mkdir -p $SW_DIR
+mkdir -p $DL_DIR
+cd $DL_DIR
+## work miniconda setup
+curl -L -O https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh
+## work - ELK stack
+wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-8.9.0-linux-x86_64.tar.gz
+wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-8.9.0-linux-x86_64.tar.gz.sha512
+shasum -a 512 -c elasticsearch-8.9.0-linux-x86_64.tar.gz.sha512 
+tar -xzf elasticsearch-8.9.0-linux-x86_64.tar.gz
 
+curl -O https://artifacts.elastic.co/downloads/kibana/kibana-8.9.0-linux-x86_64.tar.gz
+curl https://artifacts.elastic.co/downloads/kibana/kibana-8.9.0-linux-x86_64.tar.gz.sha512 | shasum -a 512 -c - 
+tar -xzf kibana-8.9.0-linux-x86_64.tar.gz
+cd kibana-8.9.0/ 
+
+rm $DL_DIR/*
+# work - databases, docker
+sudo pacman -S --noconfirm postgresql mariadb \
+                           rclone \
+                           docker docker-compose
+yay -S --noconfirm  postman-bin \
+                    mongodb-bin
+## work - vs-codium
+yay -S --noconfirm vscodium
+## work - R and RStudio
+yay -S --noconfirm r rstudio-desktop
+## work - slack, discord
+yay -S --noconfirm slack-desktop discord
+## work - configure git global
+git config --global user.name "Anuj Sable"
+git config --global user.email "anujsablework@gmail.com"
+git config --global init.defaultBranch main
