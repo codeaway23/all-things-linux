@@ -44,21 +44,14 @@ yay -S catppuccin-gtk-theme-mocha \
 	breeze-faba-icon-theme \
 	papirus-icon-theme
 
-## fix speakers and microphone
-pulseaudio --start
-
-## start bluetooth
-rfkill unblock bluetooth
-sudo systemctl enable bluetooth
-sudo systemctl start bluetooth
-
-## arch mirrors synchronization
-sudo pacman -S --noconfirm reflector
-sudo sed -i 's/^--sort .*/--sort rate/g' /etc/xdg/reflector/reflector.conf
-sudo sed -i 's/^--country .*/--country India/g' /etc/xdg/reflector/reflector.conf
-sudo systemctl enable reflector.service reflector.timer
-sudo systemctl start reflector.service reflector.timer
-sudo systemctl start reflector.service
+## install faba icons for dunst brightness/volume bar
+git clone https://github.com/snwh/faba-icon-theme.git  
+cd faba-icon-theme
+sudo pacman -S --noconfirm meson
+meson "build" --prefix=/usr
+sudo ninja -C "build" install
+cd ..
+rm -r faba-icon-theme
 
 ## shell, font and theme
 sudo pacman -S --noconfirm zsh gsfonts
@@ -94,15 +87,6 @@ yay -S --noconfirm spotify-launcher
 CONFIG_DIR=/home/$USER/.config
 mkdir -p $CONFIG_DIR
 
-## install faba icons for dunst brightness/volume bar
-git clone https://github.com/snwh/faba-icon-theme.git  
-cd faba-icon-theme
-sudo pacman -S --noconfirm meson
-meson "build" --prefix=/usr
-sudo ninja -C "build" install
-cd ..
-rm -r faba-icon-theme
-
 ## symbolic link manager
 stow --dir=$SW_DIR/all-things-linux/notes/my-desktop/config/ --target=/home/$USER .
 
@@ -120,6 +104,21 @@ sudo pacman -Syu pygmentize highlight
 (crontab -l ; echo "*/15 * * * * /bin/sh /home/anuj/.config/cron-jobs/feh-dynamic-wallpaper.sh")| crontab -
 (crontab -l ; echo "*/5 * * * * /bin/sh /home/anuj/.config/cron-jobs/low-battery-notification.sh")| crontab -
 
+## arch mirrors synchronization
+sudo pacman -S --noconfirm reflector
+sudo sed -i 's/^--sort .*/--sort rate/g' /etc/xdg/reflector/reflector.conf
+sudo sed -i 's/^--country .*/--country India/g' /etc/xdg/reflector/reflector.conf
+sudo systemctl enable reflector.service reflector.timer
+sudo systemctl start reflector.service reflector.timer
+sudo systemctl start reflector.service
+
+## fix speakers and microphone
+pulseaudio --start
+
+## start bluetooth
+rfkill unblock bluetooth
+sudo systemctl enable bluetooth
+sudo systemctl start bluetooth
 
 ## set up audio for bluetooth and synth
 sudo usermod -G users,wheel,audio $USER
