@@ -1,2 +1,8 @@
 notes/minimal-gnome/configs/*
 notes/minimal-xfce4/configs/*
+
+# runtime / generated state that should never be stowed into $HOME
+*.log
+*.bak
+__pycache__/
+*.pyc

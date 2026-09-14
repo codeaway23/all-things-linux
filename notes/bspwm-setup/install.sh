@@ -1,160 +1,179 @@
 #! /bin/sh
+set -eu
 
-## minimal sofotware installation for a functional system
-sudo pacman -Syu linux-firmware \
-	xorg-xinit xorg-xrandr \
+## where all user software lies
+SW_DIR="$HOME/software"
+REPO_DIR="$SW_DIR/all-things-linux"
+mkdir -p "$SW_DIR"
+
+## minimal software installation for a functional system
+## audio: pipewire replaces pulseaudio. pipewire-pulse provides the same
+## pactl/pamixer interface, wireplumber is the session manager (it handles
+## bluetooth auto-switching, so /etc/pulse/default.pa tweaks are not needed).
+## brightnessctl replaces xorg-xbacklight, which only works on drivers exposing
+## the RandR Backlight property and is a coin flip on modern intel/amdgpu.
+## nerd fonts moved into [extra] and no longer need the AUR.
+sudo pacman -S --needed \
+	linux-firmware \
+	xorg-xinit xorg-xrandr xorg-xinput xorg-xsetroot xorg-xrdb \
 	bspwm sxhkd \
 	alacritty kitty \
 	picom \
 	rofi \
 	polybar \
+	feh \
 	btrfs-progs ntfs-3g rsync thunar file-roller \
 	bluez bluez-utils \
-	alsa-utils pulseaudio pulseaudio-bluetooth pavucontrol pamixer \
-	ranger zsh neovim xclip stow \
+	pipewire pipewire-alsa pipewire-pulse pipewire-jack wireplumber \
+	alsa-utils pavucontrol pamixer \
+	brightnessctl \
+	dunst libnotify \
+	ranger python-pygments highlight \
+	zsh neovim xclip stow \
 	lightdm lightdm-slick-greeter \
-	lxappearance cronie 
+	lxappearance \
+	fastfetch \
+	spotify-launcher \
+	gsfonts \
+	ttf-firacode-nerd ttf-hack-nerd ttf-inconsolata-nerd ttf-iosevka-nerd ttf-meslo-nerd \
+	adwaita-icon-theme papirus-icon-theme breeze
 
 ## set up lightdm
-sudo sed -i "s/^greeter-session=.*/greeter-session=lightdm-slick-greeter/g" /etc/lightdm/lightdm.conf
+sudo sed -i "s/^#\?greeter-session=.*/greeter-session=lightdm-slick-greeter/g" /etc/lightdm/lightdm.conf
 sudo systemctl enable lightdm -f
 
-## where all user software lies
-SW_DIR=/home/$USER/software
-mkdir -p $SW_DIR
-
 ## install AUR package manager 'yay'
-cd $SW_DIR
-git clone https://aur.archlinux.org/yay.git
-cd yay
-makepkg -si
-cd /home/$USER
+if ! command -v yay >/dev/null 2>&1; then
+	cd "$SW_DIR"
+	git clone https://aur.archlinux.org/yay.git
+	cd yay
+	makepkg -si --noconfirm
+	cd "$HOME"
+fi
 
 ## set up some software
-yay -Syu --noconfirm neovim-plug dunst wps-office firefox brave-bin 
+yay -S --needed --noconfirm neovim-plug wps-office firefox brave-bin
 
 ## gtk themes and icons
-yay -S catppuccin-gtk-theme-mocha \
+yay -S --needed --noconfirm \
+	catppuccin-gtk-theme-mocha \
 	catppuccin-gtk-theme-macchiato \
 	catppuccin-gtk-theme-frappe \
 	catppuccin-gtk-theme-latte \
-	adwaita-cursors-git \
-	xcursor-breeze \
-	adwaita-icon-theme \
-	breeze-faba-icon-theme \
-	papirus-icon-theme
+	ttf-wps-fonts
 
 ## install faba icons for dunst brightness/volume bar
-git clone https://github.com/snwh/faba-icon-theme.git  
+cd "$SW_DIR"
+git clone https://github.com/snwh/faba-icon-theme.git
 cd faba-icon-theme
-sudo pacman -S --noconfirm meson
-meson "build" --prefix=/usr
+sudo pacman -S --needed --noconfirm meson
+meson setup "build" --prefix=/usr
 sudo ninja -C "build" install
-cd ..
-rm -r faba-icon-theme
+cd "$SW_DIR"
+rm -rf faba-icon-theme
 
-## shell, font and theme
-sudo pacman -S --noconfirm zsh gsfonts
-yay -S --noconfirm  ttf-firacode-nerd \
-	ttf-hack-nerd \
-	ttf-inconsolata-nerd \
-	ttf-iosevka-nerd \
-	ttf-meslo-nerd \
-	ttf-wps-fonts  
+## shell
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+[ -d "$HOME/.oh-my-zsh/plugins/zsh-autosuggestions" ] || \
+	git clone https://github.com/zsh-users/zsh-autosuggestions "$HOME/.oh-my-zsh/plugins/zsh-autosuggestions"
+[ -d "$HOME/.oh-my-zsh/plugins/zsh-syntax-highlighting" ] || \
+	git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$HOME/.oh-my-zsh/plugins/zsh-syntax-highlighting"
+[ -d "$HOME/.oh-my-zsh/themes/powerlevel10k" ] || \
+	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$HOME/.oh-my-zsh/themes/powerlevel10k"
+sed -i 's/^ZSH_THEME=\"robbyrussell\"*/ZSH_THEME=\"powerlevel10k\/powerlevel10k\"/g' "$HOME/.zshrc"
+sed -i 's/^plugins=(git)*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/g' "$HOME/.zshrc"
+sed -i 's/.*ENABLE_CORRECTION=\"true\"*/ENABLE_CORRECTION=\"true\"/g' "$HOME/.zshrc"
+chsh -s "$(which zsh)"
 
+grep -q "^export EDITOR=nvim" "$HOME/.zshrc" || cat >> "$HOME/.zshrc" <<'ZSHRC'
 
-0>/dev/null sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-git clone https://github.com/zsh-users/zsh-autosuggestions $HOME/.oh-my-zsh/plugins/zsh-autosuggestions
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.oh-my-zsh/plugins/zsh-syntax-highlighting
-git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $HOME/.oh-my-zsh/themes/powerlevel10k
-sed -i 's/^ZSH_THEME=\"robbyrussell\"*/ZSH_THEME=\"powerlevel10k\/powerlevel10k\"/g' $HOME/.zshrc
-sed -i 's/^plugins=(git)*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/g' $HOME/.zshrc
-sed -i 's/.*ENABLE_CORRECTION=\"true\"*/ENABLE_CORRECTION=\"true\"/g' $HOME/.zshrc
-chsh -s $(which zsh)
+export EDITOR=nvim
+export VISUAL=nvim
 
-echo -en '\n\n' >> $HOME/.zshrc
-echo "EDITOR=nvim" >> $HOME/.zshrc
-echo "VISUAL=nvim" >> $HOME/.zshrc
-
-echo -en '\n\n' >> $HOME/.zshrc
-sudo pacman -S --noconfirm neofetch
-echo "neofetch" >> $HOME/.zshrc
-
-## install spotify
-yay -S --noconfirm spotify-launcher
+fastfetch
+ZSHRC
 
 ### configuration
-CONFIG_DIR=/home/$USER/.config
-mkdir -p $CONFIG_DIR
+mkdir -p "$HOME/.config"
 
 ## symbolic link manager
-stow --dir=$SW_DIR/all-things-linux/notes/my-desktop/config/ --target=/home/$USER .
+stow --dir="$REPO_DIR/notes/bspwm-setup/config/" --target="$HOME" .
 
-## set up cronjobs
-crontab -l > mycron
-echo "*/15 * * * * /bin/sh /home/anuj/.config/cron-jobs/feh-dynamic-wallpaper.sh" >> mycron
-echo "*/5 * * * * /bin/sh /home/anuj/.config/cron-jobs/low-battery-notification.sh" >> mycron
-crontab mycron
-rm mycron
-
-## for ranger
-sudo pacman -Syu pygmentize highlight
-
-## set up crontab
-(crontab -l ; echo "*/15 * * * * /bin/sh /home/anuj/.config/cron-jobs/feh-dynamic-wallpaper.sh")| crontab -
-(crontab -l ; echo "*/5 * * * * /bin/sh /home/anuj/.config/cron-jobs/low-battery-notification.sh")| crontab -
+## set up cronjobs -- idempotent, appends only if the entry is not already there
+sudo pacman -S --needed --noconfirm cronie
+sudo systemctl enable --now cronie
+for JOB in \
+	"*/15 * * * * /bin/sh $HOME/.config/cron-jobs/feh-dynamic-wallpaper.sh" \
+	"*/5 * * * * /bin/sh $HOME/.config/cron-jobs/low-battery-notification.sh"
+do
+	(crontab -l 2>/dev/null || true; echo "$JOB") | sort -u | crontab -
+done
 
 ## arch mirrors synchronization
-sudo pacman -S --noconfirm reflector
+sudo pacman -S --needed --noconfirm reflector
 sudo sed -i 's/^--sort .*/--sort rate/g' /etc/xdg/reflector/reflector.conf
 sudo sed -i 's/^--country .*/--country India/g' /etc/xdg/reflector/reflector.conf
-sudo systemctl enable reflector.service reflector.timer
-sudo systemctl start reflector.service reflector.timer
-sudo systemctl start reflector.service
-
-## fix speakers and microphone
-pulseaudio --start
+sudo systemctl enable --now reflector.timer
 
 ## start bluetooth
 rfkill unblock bluetooth
-sudo systemctl enable bluetooth
-sudo systemctl start bluetooth
+sudo systemctl enable --now bluetooth
 
-## set up audio for bluetooth and synth
-sudo usermod -G users,wheel,audio $USER
-sudo echo "@audio - memlock unlimited" >> /etc/security/limits.conf
-sudo echo "@audio - rtprio unlimited" >> /etc/security/limits.conf
-sudo echo "load-module module-switch-on-connect" >> /etc/pulse/default.pa
-sudo pacman -Syu helm-synth
+## audio: pipewire is socket-activated per user, just make sure it is enabled
+systemctl --user enable --now pipewire pipewire-pulse wireplumber
+
+## realtime audio limits.
+## NOTE: `sudo echo x >> file` does NOT work -- the redirect is performed by the
+## unprivileged shell, not by sudo. Use tee.
+printf '@audio - memlock unlimited\n@audio - rtprio unlimited\n' | sudo tee /etc/security/limits.d/99-audio.conf >/dev/null
+## -a is essential: `usermod -G` REPLACES every supplementary group, which would
+## silently drop you from video/storage/docker/etc.
+sudo usermod -aG audio "$USER"
+yay -S --needed --noconfirm helm-synth
+
+## Legion 5 Pro 16ACH6H specifics.
+## brightnessctl needs the user in the video group to write /sys/class/backlight
+## when its udev rules are not picked up.
+sudo usermod -aG video "$USER"
+## fan curves, power modes and battery conservation mode for the Legion.
+## Needs linux-lts-headers (installed by arch-packages.sh) to build the module.
+yay -S --needed --noconfirm lenovolegionlinux-dkms-git
+## power management -- Ryzen laptops idle much better with tlp than without.
+sudo pacman -S --needed --noconfirm tlp powertop
+sudo systemctl enable --now tlp
 
 ## work - dev tools
-DL_DIR=/home/$USER/Downloads
-mkdir -p $DL_DIR
-cd $DL_DIR
+DL_DIR="$HOME/Downloads"
+mkdir -p "$DL_DIR"
+cd "$DL_DIR"
 ## work miniconda setup
 curl -L -O https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 bash Miniconda3-latest-Linux-x86_64.sh
-## work - ELK stack
-wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-8.9.0-linux-x86_64.tar.gz
-wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-8.9.0-linux-x86_64.tar.gz.sha512
-shasum -a 512 -c elasticsearch-8.9.0-linux-x86_64.tar.gz.sha512 
-tar -xzf elasticsearch-8.9.0-linux-x86_64.tar.gz
-
-curl -O https://artifacts.elastic.co/downloads/kibana/kibana-8.9.0-linux-x86_64.tar.gz
-curl https://artifacts.elastic.co/downloads/kibana/kibana-8.9.0-linux-x86_64.tar.gz.sha512 | shasum -a 512 -c - 
-tar -xzf kibana-8.9.0-linux-x86_64.tar.gz
+## work - ELK stack. Pin whatever version you actually want; "latest" here so the
+## URLs do not rot the way the hardcoded 8.9.0 ones did.
+ELK_VERSION=${ELK_VERSION:-9.2.0}
+for COMPONENT in elasticsearch kibana; do
+	curl -L -O "https://artifacts.elastic.co/downloads/$COMPONENT/$COMPONENT-$ELK_VERSION-linux-x86_64.tar.gz"
+	curl -L -O "https://artifacts.elastic.co/downloads/$COMPONENT/$COMPONENT-$ELK_VERSION-linux-x86_64.tar.gz.sha512"
+	shasum -a 512 -c "$COMPONENT-$ELK_VERSION-linux-x86_64.tar.gz.sha512"
+	tar -xzf "$COMPONENT-$ELK_VERSION-linux-x86_64.tar.gz"
+done
 # work - databases, docker
-sudo pacman -S --noconfirm postgresql mariadb \
+sudo pacman -S --needed --noconfirm postgresql mariadb \
                            rclone \
-                           docker docker-compose
-yay -S --noconfirm  postman-bin \
+                           docker docker-compose docker-buildx
+sudo systemctl enable --now docker
+sudo usermod -aG docker "$USER"
+yay -S --needed --noconfirm postman-bin \
                     mongodb-bin
 ## work - vs-codium
-yay -S --noconfirm vscodium
+yay -S --needed --noconfirm vscodium-bin
 ## work - R and RStudio
-yay -S --noconfirm r rstudio-desktop
+sudo pacman -S --needed --noconfirm r
+yay -S --needed --noconfirm rstudio-desktop-bin
 ## work - slack, discord
-yay -S --noconfirm slack-desktop discord
+yay -S --needed --noconfirm slack-desktop
+sudo pacman -S --needed --noconfirm discord
 ## work - configure git global
 git config --global user.name "Anuj Sable"
 git config --global user.email "anujsablework@gmail.com"

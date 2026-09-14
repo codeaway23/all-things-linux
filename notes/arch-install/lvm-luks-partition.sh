@@ -1,4 +1,5 @@
 #!/bin/sh
+set -eu
 
 DISK_EFI=/dev/nvme0n1p1
 DISK_BOOT=/dev/nvme0n1p2
@@ -46,4 +47,14 @@ mount /dev/vg00/lv-home /mnt/home
 mkdir -p /mnt/boot
 mount $DISK_BOOT /mnt/boot
 
-pacstrap -i /mnt base git neovim
+mkdir -p /mnt/boot/EFI
+mount $DISK_EFI /mnt/boot/EFI
+
+## -K initialises a fresh pacman keyring inside the new root. Without it the
+## first pacman run in the chroot fails with signature errors.
+## linux-firmware and lvm2 must be in the base install: without firmware the
+## wifi/gpu may not come up on first boot, and without lvm2 mkinitcpio cannot
+## build the lvm2 hook.
+pacstrap -K /mnt base linux-firmware lvm2 btrfs-progs xfsprogs sudo git neovim
+
+genfstab -U /mnt > /mnt/etc/fstab

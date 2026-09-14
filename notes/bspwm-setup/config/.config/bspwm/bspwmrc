@@ -4,18 +4,38 @@ xsetroot -cursor_name left_ptr
 
 ~/.config/cron-jobs/feh-dynamic-wallpaper.sh &
 
-polybar &
-
 picom --config ~/.config/picom/picom.conf &
 
-killall dunst && dunst &
+## dunst is D-Bus activated, so it starts on the first notification. Restarting
+## it here only makes sense to pick up config changes -- and the old
+## `killall dunst && dunst &` never started it on a fresh session, because
+## killall returns non-zero when nothing is running and short-circuits the &&.
+pkill -x dunst
+dunst &
 
+## polybar: single launch. The old file called `polybar &` twice, which left two
+## bars stacked on top of each other.
+## `polybar` with no bar name works because ~/.config/polybar/config.ini defines
+## exactly one bar. Swap this for the theme launcher to use the adi1090x themes:
+##   ~/.config/polybar/launch.sh --forest
+pkill -x polybar
 polybar &
 
-## set up track pad
-TRACKPAD_ID=$(xinput list | grep Touchpad | cut -d'=' -f2- | cut -b 1-2)
-TAP_ENABLED=$(xinput list-props $TRACKPAD_ID | grep "Tapping Enabled (" | cut -d'(' -f2- | rev | cut -d ')' -f2- | rev)
-echo $TAP_ENABLED | xargs -I {} xinput set-prop $TRACKPAD_ID {} 1
+## set up track pad.
+## Prefer the declarative route -- drop this into
+## /etc/X11/xorg.conf.d/30-touchpad.conf and delete the xinput block below:
+##   Section "InputClass"
+##       Identifier "touchpad"
+##       Driver "libinput"
+##       MatchIsTouchpad "on"
+##       Option "Tapping" "on"
+##       Option "NaturalScrolling" "true"
+##   EndSection
+TRACKPAD_ID=$(xinput list --id-only "$(xinput list --name-only | grep -i -m1 touchpad)" 2>/dev/null)
+if [ -n "$TRACKPAD_ID" ]; then
+	TAP_PROP=$(xinput list-props "$TRACKPAD_ID" | sed -n 's/.*Tapping Enabled (\([0-9]*\)).*/\1/p' | head -1)
+	[ -n "$TAP_PROP" ] && xinput set-prop "$TRACKPAD_ID" "$TAP_PROP" 1
+fi
 
 pgrep -x sxhkd > /dev/null || sxhkd &
 

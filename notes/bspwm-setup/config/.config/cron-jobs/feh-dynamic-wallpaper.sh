@@ -1,3 +1,4 @@
 #!/bin/sh
 export DISPLAY=:0
-feh --randomize --bg-fill /home/anuj/wallpapers/feh/*
+export XAUTHORITY="$HOME/.Xauthority"
+feh --randomize --bg-fill "$HOME"/wallpapers/feh/*

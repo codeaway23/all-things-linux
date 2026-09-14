@@ -1,9 +1,21 @@
-pcm.!default {
-  type hw
-  card 1
-}
-
-ctl.!default {
-  type hw
-  card 1
-}
+# DISABLED under PipeWire.
+#
+# This used to force ALSA's default device to card 1 to pick the analog codec
+# over HDMI on the Legion. Under PipeWire that is now actively harmful: a
+# `type hw` default makes ALSA clients grab the hardware device directly,
+# bypassing PipeWire entirely, so pamixer/pavucontrol/bluetooth routing stop
+# affecting them and the device gets locked against other apps.
+#
+# wireplumber picks the right sink by priority instead. If it still guesses
+# wrong, set the default with `wpctl status` + `wpctl set-default <id>` rather
+# than reinstating this file.
+#
+# pcm.!default {
+#   type hw
+#   card 1
+# }
+#
+# ctl.!default {
+#   type hw
+#   card 1
+# }
