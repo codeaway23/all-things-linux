@@ -48,6 +48,26 @@ sudo pacman -S --needed \
 ## "Failed to start session" after accepting your password.
 sudo sed -i "s/^#\?greeter-session=.*/greeter-session=lightdm-slick-greeter/g" /etc/lightdm/lightdm.conf
 sudo sed -i "s/^#\?user-session=.*/user-session=bspwm/g" /etc/lightdm/lightdm.conf
+
+## AccountsService stores a PER-USER session preference that lightdm reads in
+## preference to user-session above. It defaults to "default", which points at a
+## default.desktop that does not exist -- lightdm then accepts your password,
+## fails to spawn anything, and reports "Failed to start session" while the
+## journal fills with "Error writing to session: Broken pipe".
+## Seed it so the very first login works.
+AS_USER="/var/lib/AccountsService/users/$USER"
+sudo mkdir -p /var/lib/AccountsService/users
+if sudo test -f "$AS_USER"; then
+	if sudo grep -q '^XSession=' "$AS_USER"; then
+		sudo sed -i 's|^XSession=.*|XSession=bspwm|' "$AS_USER"
+	else
+		printf 'XSession=bspwm\n' | sudo tee -a "$AS_USER" >/dev/null
+	fi
+else
+	printf '[User]\nXSession=bspwm\nSystemAccount=false\n' | sudo tee "$AS_USER" >/dev/null
+fi
+sudo systemctl try-restart accounts-daemon
+
 sudo systemctl enable lightdm -f
 
 ## install AUR package manager 'yay'

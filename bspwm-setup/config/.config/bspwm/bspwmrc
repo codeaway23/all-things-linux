@@ -37,7 +37,15 @@ if [ -n "$TRACKPAD_ID" ]; then
 	[ -n "$TAP_PROP" ] && xinput set-prop "$TRACKPAD_ID" "$TAP_PROP" 1
 fi
 
-pgrep -x sxhkd > /dev/null || sxhkd &
+## sxhkd: kill and restart, do NOT guard with `pgrep -x sxhkd || sxhkd &`.
+## pgrep searches every process on the system, not just this X session, so a
+## second session (e.g. one left over from `startx`) makes the check pass and
+## this session silently comes up with no sxhkd at all -- bspwm looks fine but
+## every keybinding is dead. Restarting also keeps `bspc wm -r` from stacking
+## duplicate instances. Assumes one graphical session at a time, same as the
+## polybar and dunst handling above.
+pkill -x sxhkd
+sxhkd &
 
 bspc monitor -d I II III IV V VI VII VIII IX X
 

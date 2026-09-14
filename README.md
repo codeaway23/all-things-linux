@@ -325,6 +325,29 @@ mkinitcpio -P
 **No network after first boot.** `systemctl status NetworkManager`, then
 `nmtui`.
 
+**"Failed to start session" after LightDM accepts your password.** LightDM
+reads a *per-user* session preference from AccountsService that overrides
+`user-session` in `lightdm.conf`. If it says `default`, LightDM looks for a
+`default.desktop` that does not exist, the session dies instantly, and the
+journal fills with `Error writing to session: Broken pipe`. Check and fix:
+
+```bash
+sudo grep XSession /var/lib/AccountsService/users/$USER
+sudo sed -i 's/^XSession=.*/XSession=bspwm/' /var/lib/AccountsService/users/$USER
+sudo systemctl restart accounts-daemon lightdm
+```
+
+`install.sh` seeds this, so it should only bite you if you set LightDM up by
+hand. A missing session picker in the greeter is the same symptom.
+
+**bspwm starts but no keybinding works.** sxhkd owns every shortcut, so if it
+is not running for *your* session, bspwm looks fine and nothing responds.
+Check with `pgrep -a sxhkd`, and make sure you do not have a second X session
+still alive (a forgotten `startx` on another VT) -- older versions of
+`bspwmrc` guarded sxhkd with a system-wide `pgrep`, so a leftover session
+prevented this one from starting its own. Quit the stray session, or just
+reboot for a clean single session.
+
 **Black screen after LightDM.** Usually the NVIDIA/AMD hybrid setup. Check
 `journalctl -b -u lightdm` and `/var/log/Xorg.0.log`. Booting with
 `nvidia_drm.modeset=0` appended in GRUB (press `e` at the menu) narrows it down.

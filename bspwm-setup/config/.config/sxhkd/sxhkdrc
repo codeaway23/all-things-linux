@@ -6,12 +6,16 @@
 super + Return
 	kitty
 
-# browser launcher
-super + b
+# browser launcher.
+# NOTE: on shift. Plain `super + b` collides with `super + {p,b,comma,period}`
+# (focus brother) and `super + s` with `super + {t,shift + t,s,f}` (floating)
+# below -- sxhkd warns "Hotkey interference found" and one of the two silently
+# loses.
+super + shift + b
 	firefox &
 
 # spotify launcher
-super + s
+super + shift + s
 	spotify-launcher &
 
 # program launcher
