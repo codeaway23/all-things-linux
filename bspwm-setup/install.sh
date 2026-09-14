@@ -97,7 +97,7 @@ ZSHRC
 mkdir -p "$HOME/.config"
 
 ## symbolic link manager
-stow --dir="$REPO_DIR/notes/bspwm-setup/config/" --target="$HOME" .
+stow --dir="$REPO_DIR/bspwm-setup/config/" --target="$HOME" .
 
 ## set up cronjobs -- idempotent, appends only if the entry is not already there
 sudo pacman -S --needed --noconfirm cronie

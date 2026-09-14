@@ -8,7 +8,7 @@ EFI disk (partition #1) formatted as a vfat32 filesystem.
 boot disk (partition #2) is formatted as an ext4 filesystem. 
 arch installation (partition #3) is encypted with `cryptsetup` LUKS.
 arch installation root (logical volume #1) is formatted as a btrfs filesystem.
-arch installation home (logical volume #2) is formatted as an XFS filesystem.
+arch installation home (logical volume #2) is formatted as a btrfs filesystem.
 
 `/boot` is a separate *unencrypted* partition, so GRUB itself never has to open
 the LUKS container -- `GRUB_ENABLE_CRYPTODISK` stays off and LUKS2 (the
@@ -39,7 +39,7 @@ pacman -Syu git
 git clone https://github.com/codeaway23/all-things-linux.git
 ```
 
-`cd` into the `all-things-linux/notes/arch-install` folder. 
+`cd` into the `all-things-linux/arch-install` folder. 
 
 following that, run the following command. 
 ```bash
