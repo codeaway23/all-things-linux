@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# Spanish layout. If this is a leftover and you are on a US/en_IN keyboard,
-# change it to `setxkbmap us` (the console keymap is set in /etc/vconsole.conf).
-setxkbmap es
+# X11 keyboard layout. The console keymap is set separately in /etc/vconsole.conf.
+setxkbmap us
 
 # NOTE: .xinitrc is only read by `startx`. install.sh enables lightdm, which
 # launches bspwm via /usr/share/xsessions/bspwm.desktop and never sources this

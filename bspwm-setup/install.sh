@@ -73,7 +73,8 @@ cd "$SW_DIR"
 rm -rf faba-icon-theme
 
 ## shell
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+[ -d "$HOME/.oh-my-zsh" ] || \
+	sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 [ -d "$HOME/.oh-my-zsh/plugins/zsh-autosuggestions" ] || \
 	git clone https://github.com/zsh-users/zsh-autosuggestions "$HOME/.oh-my-zsh/plugins/zsh-autosuggestions"
 [ -d "$HOME/.oh-my-zsh/plugins/zsh-syntax-highlighting" ] || \
@@ -83,7 +84,7 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 sed -i 's/^ZSH_THEME=\"robbyrussell\"*/ZSH_THEME=\"powerlevel10k\/powerlevel10k\"/g' "$HOME/.zshrc"
 sed -i 's/^plugins=(git)*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/g' "$HOME/.zshrc"
 sed -i 's/.*ENABLE_CORRECTION=\"true\"*/ENABLE_CORRECTION=\"true\"/g' "$HOME/.zshrc"
-chsh -s "$(which zsh)"
+[ "$(getent passwd "$USER" | cut -d: -f7)" = "$(which zsh)" ] || chsh -s "$(which zsh)"
 
 grep -q "^export EDITOR=nvim" "$HOME/.zshrc" || cat >> "$HOME/.zshrc" <<'ZSHRC'
 
@@ -125,6 +126,9 @@ systemctl --user enable --now pipewire pipewire-pulse wireplumber
 ## realtime audio limits.
 ## NOTE: `sudo echo x >> file` does NOT work -- the redirect is performed by the
 ## unprivileged shell, not by sudo. Use tee.
+## pam ships /etc/security/limits.conf but NOT the limits.d/ directory, so it
+## does not exist on a fresh Arch install and tee cannot create the file in it.
+sudo mkdir -p /etc/security/limits.d
 printf '@audio - memlock unlimited\n@audio - rtprio unlimited\n' | sudo tee /etc/security/limits.d/99-audio.conf >/dev/null
 ## -a is essential: `usermod -G` REPLACES every supplementary group, which would
 ## silently drop you from video/storage/docker/etc.

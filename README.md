@@ -295,8 +295,6 @@ A few things the scripts deliberately leave to you:
 
 - **Wallpapers.** The feh cron job reads `~/wallpapers/feh/`. It is empty until
   you put images there, so your desktop will be black.
-- **Keyboard layout.** `.xinitrc` sets `setxkbmap es` (Spanish). Change it to
-  `us` if that is not what you want.
 - **`.xinitrc` is only read by `startx`.** Since LightDM is what launches your
   session, anything you add there needs to go in `~/.xprofile` or `bspwmrc`
   instead.
