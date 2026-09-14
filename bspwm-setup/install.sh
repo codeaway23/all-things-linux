@@ -13,6 +13,10 @@ mkdir -p "$SW_DIR"
 ## brightnessctl replaces xorg-xbacklight, which only works on drivers exposing
 ## the RandR Backlight property and is a coin flip on modern intel/amdgpu.
 ## nerd fonts moved into [extra] and no longer need the AUR.
+## accountsservice is only an OPTDEPEND of lightdm, so pacman does not pull
+## it in -- but slick-greeter needs org.freedesktop.Accounts to enumerate
+## users. Without it the greeter logs "ServiceUnknown: The name is not
+## activatable" and the session fails to start after you enter your password.
 sudo pacman -S --needed \
 	linux-firmware \
 	xorg-xinit xorg-xrandr xorg-xinput xorg-xsetroot xorg-xrdb \
@@ -30,7 +34,7 @@ sudo pacman -S --needed \
 	dunst libnotify \
 	ranger python-pygments highlight \
 	zsh neovim xclip stow \
-	lightdm lightdm-slick-greeter \
+	lightdm lightdm-slick-greeter accountsservice \
 	lxappearance \
 	fastfetch \
 	spotify-launcher \
