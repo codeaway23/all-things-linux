@@ -38,8 +38,12 @@ sudo pacman -S --needed \
 	ttf-firacode-nerd ttf-hack-nerd ttf-inconsolata-nerd ttf-iosevka-nerd ttf-meslo-nerd \
 	adwaita-icon-theme papirus-icon-theme breeze
 
-## set up lightdm
+## set up lightdm.
+## user-session matters: it defaults to "default", which looks for a
+## default.desktop that does not exist, and lightdm then reports
+## "Failed to start session" after accepting your password.
 sudo sed -i "s/^#\?greeter-session=.*/greeter-session=lightdm-slick-greeter/g" /etc/lightdm/lightdm.conf
+sudo sed -i "s/^#\?user-session=.*/user-session=bspwm/g" /etc/lightdm/lightdm.conf
 sudo systemctl enable lightdm -f
 
 ## install AUR package manager 'yay'
@@ -81,9 +85,16 @@ rm -rf faba-icon-theme
 	git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$HOME/.oh-my-zsh/plugins/zsh-syntax-highlighting"
 [ -d "$HOME/.oh-my-zsh/themes/powerlevel10k" ] || \
 	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$HOME/.oh-my-zsh/themes/powerlevel10k"
-sed -i 's/^ZSH_THEME=\"robbyrussell\"*/ZSH_THEME=\"powerlevel10k\/powerlevel10k\"/g' "$HOME/.zshrc"
-sed -i 's/^plugins=(git)*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/g' "$HOME/.zshrc"
-sed -i 's/.*ENABLE_CORRECTION=\"true\"*/ENABLE_CORRECTION=\"true\"/g' "$HOME/.zshrc"
+## These replace the WHOLE line rather than pattern-matching the old value, so
+## re-running the script is safe. The previous `s/^plugins=(git)*/.../` was not:
+## in a BRE `)*` means "zero or more )", so on a second run it matched the
+## already-edited line and appended the plugins again, producing an unbalanced
+## paren and a .zshrc parse error -- which breaks login shells.
+sed -i 's|^ZSH_THEME=.*|ZSH_THEME="powerlevel10k/powerlevel10k"|' "$HOME/.zshrc"
+sed -i 's|^plugins=.*|plugins=(git zsh-autosuggestions zsh-syntax-highlighting)|' "$HOME/.zshrc"
+sed -i 's|^[# ]*ENABLE_CORRECTION=.*|ENABLE_CORRECTION="true"|' "$HOME/.zshrc"
+## refuse to continue with a broken .zshrc rather than discover it at login
+zsh -n "$HOME/.zshrc"
 [ "$(getent passwd "$USER" | cut -d: -f7)" = "$(which zsh)" ] || chsh -s "$(which zsh)"
 
 grep -q "^export EDITOR=nvim" "$HOME/.zshrc" || cat >> "$HOME/.zshrc" <<'ZSHRC'
